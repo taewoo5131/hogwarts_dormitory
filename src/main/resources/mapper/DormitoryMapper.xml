@@ -1,0 +1,13 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.project.dormitory.mapper.DormitoryMapper">
+
+    <select id="questionList" resultType="com.api.project.dormitory.dto.DormitoryQuestionDto">
+        SELECT * FROM DORMITORY_QUESTION
+    </select>
+
+
+    <select id="questionChoiceList" resultType="com.api.project.dormitory.dto.DormitoryQuestionChoiceDto">
+        SELECT * FROM DORMITORY_QUESTION_CHOICE
+    </select>
+</mapper>
