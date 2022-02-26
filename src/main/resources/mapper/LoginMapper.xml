@@ -4,8 +4,8 @@
 
     <select id="login" resultType="int" parameterType="map">
         SELECT COUNT(*)
-        FROM USER_INFO
-        WHERE USER_ID = #{userId}
-          AND USER_PW = #{userPw}
+        FROM STUDENT_INFO
+        WHERE STUDENT_ID = #{studentId}
+          AND STUDENT_PW = #{studentPw}
     </select>
 </mapper>
