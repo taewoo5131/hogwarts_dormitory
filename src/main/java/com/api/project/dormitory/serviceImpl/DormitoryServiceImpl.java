@@ -3,6 +3,7 @@ package com.api.project.dormitory.serviceImpl;
 import com.api.project.dormitory.dto.DormitoryQuestionChoiceDto;
 import com.api.project.dormitory.dto.DormitoryQuestionDto;
 import com.api.project.dormitory.dto.DormitoryQuestionListResponseDto;
+import com.api.project.dormitory.dto.DormitoryQuestionResultRequestDto;
 import com.api.project.dormitory.mapper.DormitoryMapper;
 import com.api.project.dormitory.service.DormitoryService;
 import lombok.RequiredArgsConstructor;
@@ -61,12 +62,46 @@ public class DormitoryServiceImpl implements DormitoryService {
      * @return
      */
     @Override
-    public ResponseEntity postList(List list) {
+    public ResponseEntity postList(List<DormitoryQuestionResultRequestDto> list) {
         if (list.size() == dormitoryMapper.questionList().size()) {
-            System.out.println("다ㅣ 풀었음");
+            getDormitoryName(list);
         }else{
-            System.out.println("다 안풀었음");
+            log.error("error choice answer is not empty => {} " , list.size());
         }
         return null;
+    }
+
+    /**
+     * desc 기숙사 배정 결과 GET Method
+     * @return DormitoryName
+     */
+    public String getDormitoryName(List<DormitoryQuestionResultRequestDto> paramList) {
+        String dormitoryName = "";
+        String[] dormitoryArr = new String[paramList.size()];
+        paramList.forEach(item -> {
+            switch (Integer.parseInt(item.getDormitoryQuestionId())){
+                case 1:
+                    log.info("switch case 1 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+                case 2:
+                    log.info("switch case 2 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+                case 3:
+                    log.info("switch case 3 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+                case 4:
+                    log.info("switch case 4 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+                case 5:
+                    log.info("switch case 5 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+                case 6:
+                    log.info("switch case 6 >>  {} ", item.getDormitoryQuestionId());
+                    break;
+            }
+
+        });
+
+        return dormitoryName;
     }
 }
