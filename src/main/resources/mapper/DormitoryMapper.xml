@@ -10,4 +10,17 @@
     <select id="questionChoiceList" resultType="com.api.project.dormitory.dto.DormitoryQuestionChoiceDto">
         SELECT * FROM DORMITORY_QUESTION_CHOICE
     </select>
+
+    <select id="questionResult" parameterType="hashmap" resultType="String">
+        SELECT DORMITORY_QUESTION_CHOICE_RESULT
+        FROM DORMITORY_QUESTION_CHOICE
+        WHERE DORMITORY_QUESTION_ID = #{questionId}
+        AND DORMITORY_QUESTION_CHOICE_ID = #{questionAnswer}
+    </select>
+
+    <select id="getDormitoryInfo" parameterType="String" resultType="com.api.project.dormitory.dto.DormitoryInfoDto">
+        SELECT *
+        FROM DORMITORY_INFO
+        WHERE DORMITORY_ALIAS = #{dormitoryAlias}
+    </select>
 </mapper>

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,9 @@ public class DormitoryController {
     }
 
     @PostMapping("/")
-    public void dormitorySelectFinish(@RequestBody List<DormitoryQuestionResultRequestDto> list){
+    public ResponseEntity dormitorySelectFinish(HttpServletRequest req , @RequestBody List<DormitoryQuestionResultRequestDto> list){
         log.info("dormitory selectFinish");
-        dormitoryService.postList(list);
+        ResponseEntity response = dormitoryService.postList(req, list);
+        return response;
     }
 }

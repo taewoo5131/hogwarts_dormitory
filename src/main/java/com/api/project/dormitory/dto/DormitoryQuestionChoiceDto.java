@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public class DormitoryQuestionChoiceDto {
-    private final String DORMITORY_QUESTION_ID;
-    private final String DORMITORY_QUESTION_CHOICE_ID;
-    private final String DORMITORY_QUESTION_CHOICE_TITLE;
+    private String dormitoryQuestionId;
+    private String dormitoryQuestionChoiceId;
+    private String dormitoryQuestionChoiceTitle;
 }
