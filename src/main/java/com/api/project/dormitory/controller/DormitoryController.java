@@ -6,6 +6,7 @@ import com.api.project.dormitory.service.DormitoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/dormitory")
+@Api("Dormitory Controller API")
 public class DormitoryController {
 
     private final DormitoryService dormitoryService;
