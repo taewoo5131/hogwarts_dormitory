@@ -21,10 +21,16 @@ public class LoginController {
     private final LoginService loginService;
 //    private final TokenDto tokenDto;
 
-    @PostMapping("/test")
-    public ResponseEntity<TokenDto> login(@RequestBody HashMap<String,Object> paramMap) throws NoSuchAlgorithmException {
-        int result = loginService.login(paramMap);
-        log.info("controller result {} " , result);
+    @GetMapping
+    public void getLogin() {
+        log.info("getLogin controller");
+
+    }
+
+    @PostMapping
+    public ResponseEntity<TokenDto> postLogin(@RequestBody HashMap<String,Object> paramMap) throws NoSuchAlgorithmException {
+        int result = loginService.postLogin(paramMap);
+        log.info("postLogin controller result {} " , result);
 //        if (result > -1) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(TokenDto

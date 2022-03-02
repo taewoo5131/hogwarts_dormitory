@@ -7,5 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public interface LoginService {
-    Integer login(HashMap<String,Object> paramMap) throws NoSuchAlgorithmException;
+
+    Integer postLogin(HashMap<String,Object> paramMap) throws NoSuchAlgorithmException;
 }

@@ -21,7 +21,7 @@ public class LoginServiceImpl implements LoginService {
     private final LoginMapper loginMapper;
 
     @Override
-    public Integer login(HashMap<String, Object> paramMap){
+    public Integer postLogin(HashMap<String, Object> paramMap){
         if (!paramMap.isEmpty()) {
             // 암호화
             try {

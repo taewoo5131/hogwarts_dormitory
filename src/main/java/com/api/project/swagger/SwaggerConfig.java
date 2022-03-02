@@ -36,7 +36,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Hogwarts API")
-                .description("호그와트 API입니다.")
+                .description("이태우가 만든 API입니다.")
                 .version("1.0.0")
                 .build();
     }

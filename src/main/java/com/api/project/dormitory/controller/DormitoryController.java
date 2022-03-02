@@ -28,14 +28,14 @@ public class DormitoryController {
 
     private final DormitoryService dormitoryService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity dormitorySelect() {
         log.info("dormitory select");
         ResponseEntity response = dormitoryService.getList();
         return response;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity dormitorySelectFinish(HttpServletRequest req , @RequestBody List<DormitoryQuestionResultRequestDto> list){
         log.info("dormitory selectFinish");
         ResponseEntity response = dormitoryService.postList(req, list);
