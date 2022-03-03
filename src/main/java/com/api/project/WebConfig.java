@@ -1,22 +1,16 @@
 package com.api.project;
 
-import com.api.project.interceptor.DormitoryCheckInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.api.project.interceptor.DormitoryCheckinterceptorV2;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@EnableWebMvc
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(new DormitoryCheckInterceptor())
-//                .order(1)
-                .addPathPatterns("/**");
-//                .excludePathPatterns("/", ".members/add", "/login", "/logout", "/css/**", "/*.ico", "/error");
+        registry.addInterceptor(new DormitoryCheckinterceptorV2()).addPathPatterns("/**").excludePathPatterns("/dormitory");
     }
 }
