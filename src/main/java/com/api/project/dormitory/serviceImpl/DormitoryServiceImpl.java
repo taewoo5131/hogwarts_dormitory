@@ -67,7 +67,7 @@ public class DormitoryServiceImpl implements DormitoryService {
             DormitoryInfoDto dormitoryInfo = dormitoryMapper.getDormitoryInfo(dormitoryName);
             log.info("dormitory info => {} " , dormitoryInfo);
             HttpSession session = req.getSession();
-            session.setAttribute("dormitoryName", dormitoryInfo.getDormitoryId());
+            session.setAttribute("dormitoryId", dormitoryInfo.getDormitoryId());
             return new ResponseEntity(dormitoryInfo, HttpStatus.OK);
 
         }else{

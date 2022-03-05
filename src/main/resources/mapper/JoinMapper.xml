@@ -1,0 +1,8 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.project.join.mapper.JoinMapper">
+    <insert id="insertStudent" parameterType="com.api.project.join.dto.StudentDto">
+        INSERT INTO STUDENT_INFO(STUDENT_NAME, STUDENT_ID, STUDENT_PW, DORMITORY_ID)
+        VALUES (#{studentName},#{studentId},#{studentPw},#{dormitoryId})
+    </insert>
+</mapper>
