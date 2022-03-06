@@ -1,6 +1,6 @@
 package com.api.project;
 
-import com.api.project.interceptor.DormitoryCheckinterceptorV2;
+import com.api.project.interceptor.DormitoryCheckinterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,6 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new DormitoryCheckinterceptorV2()).addPathPatterns("/**").excludePathPatterns("/dormitory");
+        registry.addInterceptor(new DormitoryCheckinterceptor()).addPathPatterns("/**").excludePathPatterns("/dormitory");
     }
 }
