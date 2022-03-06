@@ -3,6 +3,7 @@ package com.api.project.login.controller;
 import com.api.project.login.dto.TokenDto;
 import com.api.project.login.security.SHA256;
 import com.api.project.login.service.LoginService;
+import com.api.project.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
