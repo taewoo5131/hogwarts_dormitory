@@ -7,9 +7,11 @@ import com.api.project.login.security.SHA256;
 import com.api.project.result.ResultEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.HashMap;
@@ -20,8 +22,10 @@ import java.util.HashMap;
 public class JoinServiceImpl implements JoinService {
 
     private final JoinMapper joinMapper;
+    private final SqlSession sqlSession;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity insertStudent(StudentDto studentDto) {
         String studentId = studentDto.getStudentId();
         String studentPw = studentDto.getStudentPw();
@@ -58,7 +62,6 @@ public class JoinServiceImpl implements JoinService {
             Integer result = joinMapper.insertStudent(studentDto);
             if (result > 0) {
                 log.info("정상 회원가입 성공");
-//                TransactionAspectSupport.currentTransactionStatus().
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
             }
         } catch (Exception e) {
