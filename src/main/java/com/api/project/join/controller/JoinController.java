@@ -2,8 +2,10 @@ package com.api.project.join.controller;
 
 import com.api.project.join.dto.StudentDto;
 import com.api.project.join.service.JoinService;
+import com.api.project.result.ResultEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +21,17 @@ public class JoinController {
     private final JoinService joinService;
 
     /**
-     * desc 회원가입 진행
+     * 회원가입 진행
+     * : @Valid로 클라이언트에서 넘어온 파라미터인 studentDto를 체크하는데 기본적으로 NotNull 등등에 걸리게 되면
+     *   result 가 Error를 담고 넘어온다. result.hasError()가 있을때는 ResponseEntity에 상태코드 , 상태 메시지 담아서 return
      */
     @PostMapping
     public ResponseEntity postJoin(@Valid StudentDto studentDto, BindingResult result) {
         if (result.hasErrors()) {
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         log.info("joinController 호출");
-//        System.out.println(studentName);
-        System.out.println(studentDto.toString());
-//        joinService.insertStudent();
-        return null;
+        ResponseEntity response = joinService.insertStudent(studentDto);
+        return response;
     }
 }

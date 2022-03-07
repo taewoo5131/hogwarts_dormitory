@@ -17,7 +17,10 @@ public enum ResultEnum {
     NO_DORMITORY("0002","기숙사 배정을 받지 않았습니다."),
     NO_TOKEN( "0003", "토큰값이 유효하지 않습니다."),
     ARGUMENTS_NOT_ENOUGH("0004","필수값 누락"),
-    SERVER_ERROR("0010","서버를 이용할 수 없습니다.");
+    PASSWORD_ERROR("0005", "PW를 확인하세요."),
+    ALREADY_USER("0006","이미 존재하는 회원입니다."),
+    SERVER_ERROR("0010", "서버를 이용할 수 없습니다."),
+    DB_ERROR("0011","DB를 이용할 수 없습니다.");
 
     private String resultCode;
     private String resultMsg;

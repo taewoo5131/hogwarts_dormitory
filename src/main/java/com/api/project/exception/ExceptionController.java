@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionController {
 
     /**
+     * 인터셉터에서 throw한 예외 처리 handler
      * 머글체크 , 기숙사 선정 유무 체크
      * @param e
      * @return

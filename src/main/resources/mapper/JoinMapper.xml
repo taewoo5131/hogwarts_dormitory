@@ -3,6 +3,11 @@
 <mapper namespace="com.api.project.join.mapper.JoinMapper">
     <insert id="insertStudent" parameterType="com.api.project.join.dto.StudentDto">
         INSERT INTO STUDENT_INFO(STUDENT_NAME, STUDENT_ID, STUDENT_PW, DORMITORY_ID)
-        VALUES (#{studentName},#{studentId},#{studentPw},#{dormitoryId})
+        VALUES (#{studentName}, #{studentId}, #{studentPw}, #{dormitoryId})
     </insert>
+    <select id="checkById" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM STUDENT_INFO
+        WHERE STUDENT_ID = #{id}
+    </select>
 </mapper>
