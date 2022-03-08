@@ -1,16 +1,13 @@
 package com.api.project.login.serviceImpl;
 
-import com.api.project.login.dto.UserDto;
 import com.api.project.login.mapper.LoginMapper;
-import com.api.project.login.security.SHA256;
+import com.api.project.security.SHA256;
 import com.api.project.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 @Service
