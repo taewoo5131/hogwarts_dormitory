@@ -3,7 +3,7 @@
 <mapper namespace="com.api.project.login.mapper.LoginMapper">
 
     <select id="login" resultType="int" parameterType="map">
-        SELECT COUNT(*)
+        SELECT STUDENT_ID , STUDENT_NAME , DORMITORY_ID
         FROM STUDENT_INFO
         WHERE STUDENT_ID = #{studentId}
           AND STUDENT_PW = #{studentPw}

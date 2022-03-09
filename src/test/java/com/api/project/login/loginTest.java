@@ -1,6 +1,5 @@
 package com.api.project.login;
 
-import com.api.project.login.dto.UserDto;
 import com.api.project.login.mapper.LoginMapper;
 import com.api.project.login.service.LoginService;
 import com.api.project.login.serviceImpl.LoginServiceImpl;
