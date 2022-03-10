@@ -2,8 +2,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.project.join.mapper.JoinMapper">
     <insert id="insertStudent" parameterType="com.api.project.join.dto.StudentDto">
-        INSERT INTO STUDENT_INFO(STUDENT_NAME, STUDENT_ID, STUDENT_PW, DORMITORY_ID)
-        VALUES (#{studentName}, #{studentId}, #{studentPw}, #{dormitoryId})
+        INSERT INTO STUDENT_INFO(STUDENT_NAME, STUDENT_ID, STUDENT_PW, DORMITORY_ID, STUDENT_SALT)
+        VALUES (#{studentName}, #{studentId}, #{studentPw}, #{dormitoryId} , #{studentSalt})
     </insert>
     <select id="checkById" parameterType="String" resultType="int">
         SELECT COUNT(*)

@@ -57,8 +57,12 @@ public class JoinServiceImpl implements JoinService {
             }
             // PW 암호화
             SHA256 sha256 = new SHA256();
-            String encryptPw = sha256.encrypt(studentPw);
+            String encryptPw = sha256.joinEncrypt(studentPw);
             studentDto.setStudentPw(encryptPw);
+
+            // 암호화할때 사용한 Salt DB에 저장하기 위함
+            String salt = sha256.getSalt();
+            studentDto.setStudentSalt(salt);
 
             // INSERT
             Integer result = joinMapper.insertStudent(studentDto);

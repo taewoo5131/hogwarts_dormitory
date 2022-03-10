@@ -2,10 +2,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.project.login.mapper.LoginMapper">
 
-    <select id="login" resultType="int" parameterType="map">
+    <select id="login" resultType="com.api.project.login.dto.LoginStudentDto" parameterType="map">
+<!--    <select id="login" resultType="int" parameterType="map">-->
         SELECT STUDENT_ID , STUDENT_NAME , DORMITORY_ID
+--         SELECT COUNT(*)
         FROM STUDENT_INFO
         WHERE STUDENT_ID = #{studentId}
           AND STUDENT_PW = #{studentPw}
+    </select>
+
+    <select id="getSalt" resultType="String" parameterType="String">
+        SELECT STUDENT_SALT
+        FROM STUDENT_INFO
+        WHERE STUDENT_ID = #{studentId}
     </select>
 </mapper>

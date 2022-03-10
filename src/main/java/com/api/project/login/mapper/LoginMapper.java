@@ -7,5 +7,7 @@ import java.util.Map;
 
 @Mapper
 public interface LoginMapper {
-    LoginStudentDto login(Map<String , String> paramMap);
+    LoginStudentDto login(Map<String, String> paramMap);
+
+    String getSalt(String studentId);
 }

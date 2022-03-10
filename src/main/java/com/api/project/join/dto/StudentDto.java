@@ -40,4 +40,6 @@ public class StudentDto {
     @NotEmpty(message = "기숙사는 필수 입력 값입니다.")
     @NotBlank(message = "공백은 넣을 수 없습니다.")
     private String dormitoryId;
+
+    private String studentSalt;
 }

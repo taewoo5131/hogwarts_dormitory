@@ -12,8 +12,7 @@ class SHA256Test {
     void 암호화테스트() {
         SHA256 sha256 = new SHA256();
         try {
-            String encrypt = sha256.encrypt("1234");
-            System.out.println(encrypt);
+            String encrypt = sha256.joinEncrypt("1234");
         } catch (Exception e) {
             e.printStackTrace();
         }
