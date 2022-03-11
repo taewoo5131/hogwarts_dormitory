@@ -28,6 +28,12 @@ dependencies {
 //	implementation 'springfox-swagger2:2.9.2'
 //	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
+
+	// - JWT
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	// - JWT
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
