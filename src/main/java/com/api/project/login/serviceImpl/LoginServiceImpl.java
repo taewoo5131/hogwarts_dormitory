@@ -1,5 +1,6 @@
 package com.api.project.login.serviceImpl;
 
+import com.api.project.config.JwtTokenProvider;
 import com.api.project.login.dto.LoginStudentDto;
 import com.api.project.login.mapper.LoginMapper;
 import com.api.project.login.service.LoginService;
@@ -27,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LoginServiceImpl implements LoginService {
 
     private final LoginMapper loginMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public ResponseEntity login(@RequestBody Map<String, String> paramMap) {
@@ -51,7 +53,8 @@ public class LoginServiceImpl implements LoginService {
             LoginStudentDto loginStudentDto = loginMapper.login(paramMap);
 
             // JWT 토큰 발급
-
+            log.info("jwt token created >> {} ", jwtTokenProvider.makeJwtToken(studentId));
+            String token = jwtTokenProvider.makeJwtToken(studentId);
 
 
         } catch (NullPointerException e) {
