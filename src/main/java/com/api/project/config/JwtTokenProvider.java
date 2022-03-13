@@ -1,6 +1,10 @@
 package com.api.project.config;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
@@ -23,8 +27,14 @@ public class JwtTokenProvider {
 
 
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 60 * 60 * 1000L;
+    // access 토큰 유효시간 30분
+    private long aceessTokenValidTime = 30 * 60 * 1000L;
+
+    // resfresh 토큰 유효기간 2주
+    LocalDate today = LocalDate.now();
+    LocalDate next2Week = today.plus(2, ChronoUnit.WEEKS);
+    Instant instant = next2Week.atStartOfDay(ZoneId.systemDefault()).toInstant();
+    Date twoWeeksAfter = Date.from(instant);
 
     // 객체 초기화, secretKey를 Base64로 인코딩
     @PostConstruct
@@ -32,15 +42,25 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    // JWT 토큰 생성
-    public String makeJwtToken(String studentId) {
+    // JWT Access 토큰 생성
+    public String makeAccessJwtToken(String studentId) {
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer("fresh")
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(30).toMillis()))
+                .setExpiration(new Date(now.getTime() + aceessTokenValidTime)) // 30분
                 .claim("id", studentId)
+                .signWith(SignatureAlgorithm.HS256, this.secretKey)
+                .compact();
+    }
+
+    // JWT Refresh 토큰 생성
+    public String makeRefreshJwtToken() {
+        Date now = new Date();
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(twoWeeksAfter) // 2주
                 .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }

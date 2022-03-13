@@ -19,6 +19,7 @@ public enum ResultEnum {
     ARGUMENTS_NOT_ENOUGH("0004","필수값 누락"),
     PASSWORD_ERROR("0005", "PW를 확인하세요."),
     ALREADY_USER("0006","이미 존재하는 회원입니다."),
+    LOGIN_ERROR("0007", "로그인 실패"),
     SERVER_ERROR("0010", "서버를 이용할 수 없습니다."),
     DB_ERROR("0011","DB를 이용할 수 없습니다.");
 

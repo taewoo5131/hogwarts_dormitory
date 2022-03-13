@@ -16,4 +16,11 @@
         FROM STUDENT_INFO
         WHERE STUDENT_ID = #{studentId}
     </select>
+    
+    <insert id="changeRefreshToken" parameterType="map">
+        UPDATE STUDENT_INFO
+        SET STUDENT_REFRESH_TOKEN = #{refreshToken}
+        WHERE STUDENT_ID = #{studentId}
+    </insert>
+
 </mapper>

@@ -24,7 +24,7 @@ public class LoginController {
     @PostMapping
 //    public ResponseEntity login(@RequestBody Map<String , String> paramMap) {
     public ResponseEntity login(@RequestBody Map<String, String> paramMap) {
-        loginService.login(paramMap);
-        return null;
+        ResponseEntity result = loginService.login(paramMap);
+        return result;
     }
 }
