@@ -13,6 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 public class BoardController {
     @GetMapping("/list")
     public void list(HttpServletRequest request) {
-        log.info("board list ~~~ {} " ,request.getHeader("Authorization"));
+
     }
 }

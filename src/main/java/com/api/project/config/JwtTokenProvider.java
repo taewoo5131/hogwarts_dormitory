@@ -22,24 +22,22 @@ import lombok.*;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-
-
+//    @Value("${jwt.secret}")
+    private String secretKey = "hogwartapiproject2022leetaewoo";
     // access 토큰 유효시간 30분
-    private long aceessTokenValidTime = 30 * 60 * 1000L;
+//    private final long aceessTokenValidTime = 30 * 60 * 1000L;
+    private final long aceessTokenValidTime = 1000L;
 
     // resfresh 토큰 유효기간 2주
     LocalDate today = LocalDate.now();
     LocalDate next2Week = today.plus(2, ChronoUnit.WEEKS);
     Instant instant = next2Week.atStartOfDay(ZoneId.systemDefault()).toInstant();
-    Date twoWeeksAfter = Date.from(instant);
+    private final Date twoWeeksAfter = Date.from(instant);
 
     // 객체 초기화, secretKey를 Base64로 인코딩
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        this.secretKey = Base64.getEncoder().encodeToString(this.secretKey.getBytes());
     }
 
     // JWT Access 토큰 생성
@@ -70,18 +68,19 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token 값을 가져옴. "X-AUTH-TOKEN" : "TOKEN값'
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+    // access 토큰 검증 + 만료시간 확인
+    public boolean validAccessToken(String token) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey.getBytes()).parseClaimsJws(token);
+        return !claims.getBody().getExpiration().before(new Date());
     }
 
     // 토큰의 유효성 + 만료일자 확인
-    public boolean validateToken(String jwtToken) {
+    /*public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
-    }
+    }*/
 }

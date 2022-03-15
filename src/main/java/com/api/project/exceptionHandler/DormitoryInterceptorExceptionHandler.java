@@ -1,4 +1,4 @@
-package com.api.project.exception;
+package com.api.project.exceptionHandler;
 
 import com.api.project.result.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * ExceptionHandler
+ * Dormitory ExceptionHandler
  */
 @Slf4j
-@RestControllerAdvice
-public class ExceptionController {
+@RestControllerAdvice("com.api.project.dormitory")
+public class DormitoryInterceptorExceptionHandler {
 
     /**
      * 인터셉터에서 throw한 예외 처리 handler

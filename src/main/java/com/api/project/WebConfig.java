@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new DormitoryCheckinterceptor()).order(1).addPathPatterns("/**").excludePathPatterns("/dormitory","/swagger-ui");
-        registry.addInterceptor(new TokenCheckInterceptor()).order(2).addPathPatterns("/**").excludePathPatterns("/dormitory", "/user/**","/swagger-ui");
+        registry.addInterceptor(new TokenCheckInterceptor()).order(2).addPathPatterns("/**").excludePathPatterns("/dormitory", "/join" ,"/user/**","/swagger-ui");
     }
 
 }

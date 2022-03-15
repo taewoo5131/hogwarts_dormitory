@@ -50,15 +50,12 @@ public class LoginServiceImpl implements LoginService {
             // DB SELECT : 로그인이 잘못되면 NullPointerException 발생
             try {
                 LoginStudentDto loginStudentDto = loginMapper.login(paramMap);
-                System.out.println(loginStudentDto);
                 if (loginStudentDto == null) {
                     throw new NullPointerException("select 결과 null");
                 }
                 // JWT 토큰 발급
                 String accessToken = jwtTokenProvider.makeAccessJwtToken(studentId);
                 String refreshToken = jwtTokenProvider.makeRefreshJwtToken();
-                log.info("jwt accessToken created >> {} ", accessToken);
-                log.info("jwt refreshToken created >> {} ", refreshToken);
 
                 // refreshToken DB 저장
                 HashMap<String, String> changeMap = new HashMap<>();
