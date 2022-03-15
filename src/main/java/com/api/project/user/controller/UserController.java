@@ -1,6 +1,6 @@
-package com.api.project.login.controller;
+package com.api.project.user.controller;
 
-import com.api.project.login.service.LoginService;
+import com.api.project.user.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -9,22 +9,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/user")
+public class UserController {
 
     private final LoginService loginService;
 
-    @PostMapping
-//    public ResponseEntity login(@RequestBody Map<String , String> paramMap) {
+    /**
+     * login
+     * @param paramMap
+     * @return
+     */
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody Map<String, String> paramMap) {
         ResponseEntity result = loginService.login(paramMap);
         return result;
     }
+
+
 }

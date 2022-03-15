@@ -1,15 +1,13 @@
-package com.api.project.login.serviceImpl;
+package com.api.project.user.serviceImpl;
 
 import com.api.project.config.JwtTokenProvider;
-import com.api.project.login.dto.LoginStudentDto;
-import com.api.project.login.mapper.LoginMapper;
-import com.api.project.login.service.LoginService;
+import com.api.project.user.dto.LoginStudentDto;
+import com.api.project.user.mapper.LoginMapper;
+import com.api.project.user.service.LoginService;
 import com.api.project.result.ResultEnum;
 import com.api.project.security.SHA256;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.security.MessageDigest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor

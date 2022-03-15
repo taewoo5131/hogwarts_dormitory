@@ -1,17 +1,12 @@
 package com.api.project.login;
 
-import com.api.project.login.mapper.LoginMapper;
-import com.api.project.login.service.LoginService;
-import com.api.project.login.serviceImpl.LoginServiceImpl;
-import org.assertj.core.api.Assertions;
+import com.api.project.user.mapper.LoginMapper;
+import com.api.project.user.serviceImpl.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
 

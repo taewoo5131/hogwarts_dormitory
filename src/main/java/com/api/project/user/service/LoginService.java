@@ -1,4 +1,4 @@
-package com.api.project.login.service;
+package com.api.project.user.service;
 
 import org.springframework.http.ResponseEntity;
 

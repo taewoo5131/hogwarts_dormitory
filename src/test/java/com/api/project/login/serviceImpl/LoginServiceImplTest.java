@@ -1,6 +1,6 @@
 package com.api.project.login.serviceImpl;
 
-import com.api.project.login.mapper.LoginMapper;
+import com.api.project.user.serviceImpl.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

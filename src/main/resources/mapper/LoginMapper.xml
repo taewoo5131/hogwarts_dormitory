@@ -1,8 +1,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.api.project.login.mapper.LoginMapper">
+<mapper namespace="com.api.project.user.mapper.LoginMapper">
 
-    <select id="login" resultType="com.api.project.login.dto.LoginStudentDto" parameterType="map">
+    <select id="login" resultType="com.api.project.user.dto.LoginStudentDto" parameterType="map">
 <!--    <select id="login" resultType="int" parameterType="map">-->
         SELECT STUDENT_ID , STUDENT_NAME , DORMITORY_ID
 --         SELECT COUNT(*)

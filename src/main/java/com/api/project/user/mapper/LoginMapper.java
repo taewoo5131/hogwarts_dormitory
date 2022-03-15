@@ -1,6 +1,6 @@
-package com.api.project.login.mapper;
+package com.api.project.user.mapper;
 
-import com.api.project.login.dto.LoginStudentDto;
+import com.api.project.user.dto.LoginStudentDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
