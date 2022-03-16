@@ -4,7 +4,7 @@
 
     <select id="login" resultType="com.api.project.user.dto.LoginStudentDto" parameterType="map">
 <!--    <select id="login" resultType="int" parameterType="map">-->
-        SELECT STUDENT_ID , STUDENT_NAME , DORMITORY_ID
+        SELECT STUDENT_SEQ_ID , STUDENT_ID , STUDENT_NAME , DORMITORY_ID
 --         SELECT COUNT(*)
         FROM STUDENT_INFO
         WHERE STUDENT_ID = #{studentId}

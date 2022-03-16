@@ -6,6 +6,7 @@ import lombok.Data;
 public class LoginStudentDto {
     private String resultCode;
     private String resultMsg;
+    private String studentSeqId;
     private String studentId;
     private String studentName;
     private String dormitoryId;

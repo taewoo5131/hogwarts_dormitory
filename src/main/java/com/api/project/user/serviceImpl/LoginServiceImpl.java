@@ -54,7 +54,7 @@ public class LoginServiceImpl implements LoginService {
                     throw new NullPointerException("select 결과 null");
                 }
                 // JWT 토큰 발급
-                String accessToken = jwtTokenProvider.makeAccessJwtToken(studentId);
+                String accessToken = jwtTokenProvider.makeAccessJwtToken(loginStudentDto.getStudentSeqId());
                 String refreshToken = jwtTokenProvider.makeRefreshJwtToken();
 
                 // refreshToken DB 저장

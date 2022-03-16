@@ -30,6 +30,12 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         }
         log.info("TokenCheckInterceptor 호출 token 정보 >> {}", requestToken);
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String userPk = jwtTokenProvider.getUserPk(requestToken);
+        try {
+            System.out.println(userPk);
+        } catch (Exception k) {
+            System.out.println("시발");
+        }
         try {
             boolean b = jwtTokenProvider.validAccessToken(requestToken);
             if (b) {
@@ -37,8 +43,9 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             } else {
                 log.info("accessToken 사용불가");
             }
+            // Access Token 만료
         } catch (ExpiredJwtException e) {
-            throw new TokenException("access token이 유효하지 않습니다.");
+//            throw new TokenException("access token이 유효하지 않습니다.");
         } catch (Exception e) {
             throw new Exception();
         }
