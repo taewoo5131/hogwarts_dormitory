@@ -1,4 +1,4 @@
-package com.api.project.config;
+package com.api.project.token;
 
 import java.time.Duration;
 import java.time.Instant;

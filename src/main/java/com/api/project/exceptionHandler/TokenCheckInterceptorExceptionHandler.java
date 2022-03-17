@@ -1,6 +1,6 @@
 package com.api.project.exceptionHandler;
 
-import com.api.project.exception.TokenException;
+import com.api.project.token.exception.TokenException;
 import com.api.project.result.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

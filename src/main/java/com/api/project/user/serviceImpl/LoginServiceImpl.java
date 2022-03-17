@@ -1,6 +1,6 @@
 package com.api.project.user.serviceImpl;
 
-import com.api.project.config.JwtTokenProvider;
+import com.api.project.token.JwtTokenProvider;
 import com.api.project.user.dto.LoginStudentDto;
 import com.api.project.user.mapper.LoginMapper;
 import com.api.project.user.service.LoginService;

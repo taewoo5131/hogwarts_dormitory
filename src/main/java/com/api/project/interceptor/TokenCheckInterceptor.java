@@ -1,10 +1,8 @@
 package com.api.project.interceptor;
 
-import com.api.project.config.JwtTokenProvider;
-import com.api.project.exception.TokenException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
+import com.api.project.token.JwtTokenProvider;
+import com.api.project.token.mapper.JwtTokenMapper;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,40 +17,51 @@ import javax.servlet.http.HttpServletResponse;
  * /dormitory ,/join , /user/** ( /login , /logout ) 을 제외한 모든 요청에 interceptor
  */
 @Slf4j
-@Component
 public class TokenCheckInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private JwtTokenMapper jwtTokenMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String[] requestTokenArr = request.getHeader("Authorization").split("Bearer");
         String requestToken = requestTokenArr[1];
+        /**
+         * Access Token이 없는 경우
+         */
         if (requestToken == null || requestToken.equals("")) {
+            // throw Exception
             return false;
         }
         log.info("TokenCheckInterceptor 호출 token 정보 >> {}", requestToken);
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
-        String userPk = jwtTokenProvider.getUserPk(requestToken);
-        try {
-            System.out.println(userPk);
-        } catch (Exception k) {
-            System.out.println("시발");
-        }
+        /**
+         * Access Token 만료시간 검증
+         */
         try {
             boolean b = jwtTokenProvider.validAccessToken(requestToken);
             if (b) {
-                log.info("accessToken 유효");
-            } else {
-                log.info("accessToken 사용불가");
+                return true;
             }
-            // Access Token 만료
-        } catch (ExpiredJwtException e) {
-//            throw new TokenException("access token이 유효하지 않습니다.");
-        } catch (Exception e) {
-            throw new Exception();
+        /**
+         * Access Token이 만료된 경우
+         */
+        } catch (ExpiredJwtException/* | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException*/ e) {
+            e.printStackTrace();
+            log.error("유효하지 않은 토큰. {} ", e.getClaims().get("pk"));
+            System.out.println(jwtTokenMapper);
+            /**
+             * Refresh Token 검증
+             */
+
+            return false;
+//            try {
+//                String userPk = jwtTokenProvider.getUserPk(requestToken);
+//                System.out.println(userPk);
+//            } catch (Exception k) {
+//                System.out.println("시발");
+//            }
         }
-
-
-//        System.out.println(b);
-
         return true;
     }
 }
