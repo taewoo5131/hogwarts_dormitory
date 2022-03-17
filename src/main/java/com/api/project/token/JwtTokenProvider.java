@@ -58,7 +58,8 @@ public class JwtTokenProvider {
         Date now = new Date();
         return Jwts.builder()
                 .setIssuedAt(now)
-                .setExpiration(twoWeeksAfter) // 2주
+//                .setExpiration(twoWeeksAfter) // 2주
+                .setExpiration(new Date(now.getTime() + aceessTokenValidTime)) // 30분
                 .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }

@@ -21,8 +21,8 @@ public class TokenCheckInterceptorExceptionHandler {
      */
     @ExceptionHandler(TokenException.class)
     public ResponseEntity tokenExceptionHandler(TokenException e) {
-        log.error("this is ExceptionController.illegalArgumentExceptionHandler {} " , e.getMessage());
-        return new ResponseEntity(ResultEnum.NO_TOKEN,HttpStatus.BAD_REQUEST);
+        log.error("this is TokenCheckInterceptorExceptionHandler.tokenExceptionHandler {} " , e.getMessage());
+        return new ResponseEntity(ResultEnum.NO_TOKEN,HttpStatus.UNAUTHORIZED);
     }
 
     /*@ExceptionHandler(Exception.class)
