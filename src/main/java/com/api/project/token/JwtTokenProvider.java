@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     private String secretKey = "hogwartapiproject2022leetaewoo";
     // access 토큰 유효시간 30분
 //    private final long aceessTokenValidTime = 30 * 60 * 1000L;
-    private final long aceessTokenValidTime = 1000L;
+    private final long aceessTokenValidTime = 10*1000L;
 
     // resfresh 토큰 유효기간 2주
     LocalDate today = LocalDate.now();
@@ -42,6 +42,7 @@ public class JwtTokenProvider {
 
     // JWT Access 토큰 생성
     public String makeAccessJwtToken(String studentSeqId) {
+//        this.secretKey = Base64.getEncoder().encodeToString(this.secretKey.getBytes());
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -55,11 +56,12 @@ public class JwtTokenProvider {
 
     // JWT Refresh 토큰 생성
     public String makeRefreshJwtToken() {
+//        this.secretKey = Base64.getEncoder().encodeToString(this.secretKey.getBytes());
         Date now = new Date();
         return Jwts.builder()
                 .setIssuedAt(now)
-//                .setExpiration(twoWeeksAfter) // 2주
-                .setExpiration(new Date(now.getTime() + aceessTokenValidTime)) // 30분
+                .setExpiration(twoWeeksAfter) // 2주
+//                .setExpiration(new Date(now.getTime() + aceessTokenValidTime)) // 30분
                 .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }

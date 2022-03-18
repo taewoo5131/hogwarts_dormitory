@@ -1,5 +1,6 @@
 package com.api.project.interceptor;
 
+import com.api.project.result.ResultEnum;
 import com.api.project.token.JwtTokenProvider;
 import com.api.project.token.exception.TokenException;
 import com.api.project.token.mapper.JwtTokenMapper;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.jdbc.Null;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -69,8 +71,13 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                          * Access Token 재발급
                          */
                         log.info("AccessToken 재발급");
-
-                        return false;
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("resultCode", ResultEnum.NEW_TOKEN.getResultCode());
+                        jsonObject.put("resultMsg", ResultEnum.NEW_TOKEN.getResultMsg());
+                        jsonObject.put("token", new JwtTokenProvider().makeAccessJwtToken(requestPk));
+                        response.setCharacterEncoding("utf-8");
+                        response.setContentType("application/json");
+                        response.getWriter().write(String.valueOf(jsonObject));
                     }
                     /**
                      * Refresh Token이 만료된 경우
@@ -82,14 +89,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                     log.error("RefreshToken도 만료");
                     throw new TokenException("RefreshToken null");
                 }
-
                 return false;
-//            try {
-//                String userPk = jwtTokenProvider.getUserPk(requestToken);
-//                System.out.println(userPk);
-//            } catch (Exception k) {
-//                System.out.println("시발");
-//            }
             }
             return true;
         /**
