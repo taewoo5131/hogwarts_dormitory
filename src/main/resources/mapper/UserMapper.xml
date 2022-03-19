@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.api.project.user.mapper.LoginMapper">
+<mapper namespace="com.api.project.user.mapper.UserMapper">
 
     <select id="login" resultType="com.api.project.user.dto.LoginStudentDto" parameterType="map">
 <!--    <select id="login" resultType="int" parameterType="map">-->

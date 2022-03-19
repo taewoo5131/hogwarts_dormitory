@@ -1,14 +1,20 @@
 package com.api.project.user.controller;
 
-import com.api.project.user.service.LoginService;
+import com.api.project.result.ResultEnum;
+import com.api.project.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -17,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    private final LoginService loginService;
+    private final UserService userService;
 
     /**
      * login
@@ -25,9 +31,33 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Map<String, String> paramMap) {
-        ResponseEntity result = loginService.login(paramMap);
+    public ResponseEntity login(@RequestBody Map<String, String> paramMap, HttpServletResponse response) {
+        ResponseEntity result = userService.login(paramMap,response);
         return result;
+    }
+
+    /**
+     * logout
+     *
+     * @param paramMap
+     * @return
+     */
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestBody Map<String, String> param, HttpServletRequest request) {
+        try {
+            String studentId = param.get("studentId");
+            String dormitoryId = (String) request.getSession().getAttribute("dormitoryId");
+            String requestToken = request.getHeader("Authorization");
+
+            Map<String, String> paramMap = new HashMap();
+            paramMap.put("studentId", studentId);
+            paramMap.put("dormitoryId", dormitoryId);
+            paramMap.put("token", requestToken);
+            userService.logout(paramMap);
+        } catch (NullPointerException e) {
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
 

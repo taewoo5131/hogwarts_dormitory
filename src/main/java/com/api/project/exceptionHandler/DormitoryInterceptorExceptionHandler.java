@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * Dormitory ExceptionHandler
  */
 @Slf4j
-@RestControllerAdvice("com.api.project.dormitory")
+//@RestControllerAdvice("com.api.project.dormitory")
+@RestControllerAdvice
 public class DormitoryInterceptorExceptionHandler {
 
     /**

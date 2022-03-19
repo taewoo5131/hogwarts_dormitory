@@ -1,7 +1,7 @@
 package com.api.project.login;
 
-import com.api.project.user.mapper.LoginMapper;
-import com.api.project.user.serviceImpl.LoginServiceImpl;
+import com.api.project.user.mapper.UserMapper;
+import com.api.project.user.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 @ExtendWith(MockitoExtension.class)
 public class loginTest {
     @InjectMocks
-    private LoginServiceImpl loginServiceImpl;
+    private UserServiceImpl userServiceImpl;
 
     @Mock
-    private LoginMapper loginMapper;
+    private UserMapper loginMapper;
 
     @Test
     public void 로그인테스트() {

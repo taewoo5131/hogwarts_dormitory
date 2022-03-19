@@ -22,11 +22,11 @@ import lombok.*;
 @Component
 public class JwtTokenProvider {
 
-//    @Value("${jwt.secret}")
-    private String secretKey = "hogwartapiproject2022leetaewoo";
+    // 객체 초기화, secretKey를 Base64로 인코딩
+    private String secretKey = Base64.getEncoder().encodeToString("hogwartapiproject2022leetaewoo".getBytes());
     // access 토큰 유효시간 30분
-//    private final long aceessTokenValidTime = 30 * 60 * 1000L;
-    private final long aceessTokenValidTime = 10*1000L;
+    private final long aceessTokenValidTime = 30 * 60 * 1000L;
+//    private final long aceessTokenValidTime = 60*1000L;
 
     // resfresh 토큰 유효기간 2주
     LocalDate today = LocalDate.now();
@@ -35,7 +35,7 @@ public class JwtTokenProvider {
     private final Date twoWeeksAfter = Date.from(instant);
 
     // 객체 초기화, secretKey를 Base64로 인코딩
-    @PostConstruct
+//    @PostConstruct
     protected void init() {
         this.secretKey = Base64.getEncoder().encodeToString(this.secretKey.getBytes());
     }
@@ -61,7 +61,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(twoWeeksAfter) // 2주
-//                .setExpiration(new Date(now.getTime() + aceessTokenValidTime)) // 30분
+//                .setExpiration(new Date(60 * 1000L)) // 15초
                 .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }
@@ -73,7 +73,7 @@ public class JwtTokenProvider {
 
     // access 토큰 검증 + 만료시간 확인
     public boolean validAccessToken(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey.getBytes()).parseClaimsJws(token);
+        Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token);
         return !claims.getBody().getExpiration().before(new Date());
     }
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mapper
-public interface LoginMapper {
+public interface UserMapper {
     LoginStudentDto login(Map<String, String> paramMap);
 
     String getSalt(String studentId);

@@ -2,8 +2,8 @@ package com.api.project.user.serviceImpl;
 
 import com.api.project.token.JwtTokenProvider;
 import com.api.project.user.dto.LoginStudentDto;
-import com.api.project.user.mapper.LoginMapper;
-import com.api.project.user.service.LoginService;
+import com.api.project.user.mapper.UserMapper;
+import com.api.project.user.service.UserService;
 import com.api.project.result.ResultEnum;
 import com.api.project.security.SHA256;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +25,13 @@ import java.util.Map;
 @Primary
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
-public class LoginServiceImpl implements LoginService {
+public class UserServiceImpl implements UserService {
 
-    private final LoginMapper loginMapper;
+    private final UserMapper loginMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public ResponseEntity login(@RequestBody Map<String, String> paramMap) {
+    public ResponseEntity login(@RequestBody Map<String, String> paramMap, HttpServletResponse response) {
         String studentId = paramMap.get("studentId");
         String studentPw = paramMap.get("studentPw");
 
@@ -87,6 +89,16 @@ public class LoginServiceImpl implements LoginService {
             e.printStackTrace();
             return new ResponseEntity(ResultEnum.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity logout(Map<String, String> paramMap) {
+        System.out.println(paramMap.toString());
+        String token = paramMap.get("token");
+        String studentId = paramMap.get("studentId");
+        String dormitoryId = paramMap.get("dormitoryId");
+
         return null;
     }
 }

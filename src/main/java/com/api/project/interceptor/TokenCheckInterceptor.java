@@ -14,13 +14,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import springfox.documentation.spring.web.json.Json;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
 /**
  * Access Token 및 Refresh Token 검증
- * /dormitory ,/join , /user/** ( /login , /logout ) 을 제외한 모든 요청에 interceptor
+ * /dormitory ,/join , /user/login  을 제외한 모든 요청에 interceptor
  */
 @Slf4j
 public class TokenCheckInterceptor implements HandlerInterceptor {
@@ -30,18 +31,13 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        /**
-         * AccessToken이 빈값일 경우
-         */
+        String requestToken = "";
         try {
-            String[] requestTokenArr = request.getHeader("Authorization").split("Bearer");
-            String requestToken = requestTokenArr[1];
             /**
-             * Access Token이 없는 경우
+             * Http Header에서 token get
              */
-            if (requestToken == null || requestToken.equals("")) {
-                throw new TokenException("AccessToken null");
-            }
+            requestToken = request.getHeader("Authorization");
+
             log.info("TokenCheckInterceptor 호출 token 정보 >> {}", requestToken);
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
             /**
@@ -72,22 +68,24 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                          */
                         log.info("AccessToken 재발급");
                         JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("resultCode", ResultEnum.NEW_TOKEN.getResultCode());
-                        jsonObject.put("resultMsg", ResultEnum.NEW_TOKEN.getResultMsg());
+                        jsonObject.put("resultCode", ResultEnum.BAD_ACCESS_TOKEN.getResultCode());
+                        jsonObject.put("resultMsg", ResultEnum.BAD_ACCESS_TOKEN.getResultMsg());
                         jsonObject.put("token", new JwtTokenProvider().makeAccessJwtToken(requestPk));
                         response.setCharacterEncoding("utf-8");
                         response.setContentType("application/json");
                         response.getWriter().write(String.valueOf(jsonObject));
+
                     }
-                    /**
-                     * Refresh Token이 만료된 경우
-                     */
+                /**
+                 * Refresh Token이 만료된 경우
+                 */
                 } catch (ExpiredJwtException q) {
                     /**
                      * return 토큰이 만료되었습니다.
                      */
                     log.error("RefreshToken도 만료");
-                    throw new TokenException("RefreshToken null");
+
+                    throw new TokenException("BAD_REFRESH_TOKEN");
                 }
                 return false;
             }
@@ -97,7 +95,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
          */
         } catch (NullPointerException e) {
             log.info("HTTP header에 Authorization 자체가 null");
-            throw new TokenException("AccessToken null");
+            throw new TokenException("NO_TOKEN");
         }
 
     }
