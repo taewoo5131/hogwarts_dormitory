@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +24,13 @@ public class UserController {
 
     /**
      * login
+     *
      * @param paramMap
      * @return
      */
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Map<String, String> paramMap, HttpServletResponse response) {
-        ResponseEntity result = userService.login(paramMap,response);
+        ResponseEntity result = userService.login(paramMap, response);
         return result;
     }
 
@@ -45,9 +43,19 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity logout(@RequestBody Map<String, String> param, HttpServletRequest request) {
         try {
+            /**
+             * cookie에서 token get
+             */
+            Cookie[] cookies = request.getCookies();
+            String requestToken = "";
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    requestToken = cookie.getValue();
+                }
+            }
             String studentId = param.get("studentId");
             String dormitoryId = (String) request.getSession().getAttribute("dormitoryId");
-            String requestToken = request.getHeader("Authorization");
+//            requestToken = request.getHeader("Authorization");
 
             Map<String, String> paramMap = new HashMap();
             paramMap.put("studentId", studentId);
@@ -59,6 +67,4 @@ public class UserController {
         }
         return null;
     }
-
-
 }

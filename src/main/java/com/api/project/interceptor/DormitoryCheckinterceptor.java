@@ -20,7 +20,6 @@ public class DormitoryCheckinterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         String dormitoryId = (String) session.getAttribute("dormitoryId");
-        System.out.println(request.getContextPath());
         try {
             if (dormitoryId.equals("") || dormitoryId.equals("0")) {
                 throw new IllegalArgumentException("기숙사 배정을 받지 않았습니다.");

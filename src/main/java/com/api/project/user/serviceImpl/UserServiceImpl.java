@@ -65,6 +65,12 @@ public class UserServiceImpl implements UserService {
                 changeMap.put("refreshToken", refreshToken);
                 int result = loginMapper.changeRefreshToken(changeMap);
 
+                // accessToken cookie 저장
+                Cookie cookie = new Cookie("token",accessToken);
+                cookie.setHttpOnly(true);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+
                 // update 정상 처리
                 if (result > 0) {
                     // Client에게 Dto return

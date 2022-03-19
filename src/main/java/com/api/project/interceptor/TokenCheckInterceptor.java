@@ -36,7 +36,17 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             /**
              * Http Header에서 token get
              */
-            requestToken = request.getHeader("Authorization");
+//            requestToken = request.getHeader("Authorization");
+
+            /**
+             * cookie에서 token get
+             */
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    requestToken = cookie.getValue();
+                }
+            }
 
             log.info("TokenCheckInterceptor 호출 token 정보 >> {}", requestToken);
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
@@ -75,6 +85,13 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                         response.setContentType("application/json");
                         response.getWriter().write(String.valueOf(jsonObject));
 
+                        /**
+                         * Access Token 쿠키에 저장
+                         */
+                        Cookie cookie = new Cookie("token",new JwtTokenProvider().makeAccessJwtToken(requestPk));
+                        cookie.setHttpOnly(true);
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
                     }
                 /**
                  * Refresh Token이 만료된 경우
@@ -85,6 +102,9 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                      */
                     log.error("RefreshToken도 만료");
 
+                    /**
+                     * 로그아웃
+                     */
                     throw new TokenException("BAD_REFRESH_TOKEN");
                 }
                 return false;
@@ -93,8 +113,8 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         /**
          * HTTP header에 Authorization 자체가 없을 경우
          */
-        } catch (NullPointerException e) {
-            log.info("HTTP header에 Authorization 자체가 null");
+        } catch (NullPointerException | IllegalArgumentException e) {
+            log.info("HTTP token 자체가 null");
             throw new TokenException("NO_TOKEN");
         }
 
