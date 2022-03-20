@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity logout(Map<String, String> paramMap, HttpServletRequest request, HttpServletResponse response) {
-        log.info("logout할 유저 >> {} ",paramMap.toString());
+
         String token = paramMap.get("token");
         String studentSeqId = paramMap.get("studentSeqId");
         String dormitoryId = paramMap.get("dormitoryId");
@@ -125,8 +125,10 @@ public class UserServiceImpl implements UserService {
         map.put("dormitoryId", dormitoryId);
         int result = userMapper.logout(map);
         if (result > 0) {
+            log.info("logout할 유저 >> {} ",paramMap.toString());
             return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
         }else{
+
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,0 +1,20 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.project.board.mapper.BoardMapper">
+    <select id="getAllCount" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD
+    </select>
+
+<!--    <select id="getBoard" resultType="list" parameterType="map">-->
+    <select id="getBoard" resultType="list">
+        SELECT * FROM STUDENT_INFO si
+--         INNER JOIN BOARD b
+--         ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID
+--         LEFT OUTER JOIN FILE f
+--         ON b.BOARD_SEQ_ID = f.BOARD_SEQ_ID
+--         ORDER BY b.BOARD_SEQ_ID
+--         LIMIT #{pageNo},#{pageSize}
+--         LIMIT 0,3
+    </select>
+</mapper>
