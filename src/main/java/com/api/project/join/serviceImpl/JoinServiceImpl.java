@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -28,11 +30,12 @@ public class JoinServiceImpl implements JoinService {
 
 
     @Override
-    public ResponseEntity insertStudent(StudentDto studentDto) {
+    public ResponseEntity insertStudent(StudentDto studentDto, HttpServletRequest request) {
         String studentId = studentDto.getStudentId();
         String studentPw = studentDto.getStudentPw();
         String studentPwCh = studentDto.getStudentPwCh();
-        int dormitoryId = Integer.parseInt(studentDto.getDormitoryId());
+//        int dormitoryId = Integer.parseInt(studentDto.getDormitoryId());
+        int dormitoryId = Integer.parseInt((String) request.getSession().getAttribute("dormitoryId"));
         /**
          * Validation Check
          */
@@ -63,6 +66,9 @@ public class JoinServiceImpl implements JoinService {
             // 암호화할때 사용한 Salt DB에 저장하기 위함
             String salt = sha256.getSalt();
             studentDto.setStudentSalt(salt);
+
+            // Session에서 꺼내온 기숙사 ID dto에 담기
+            studentDto.setDormitoryId(String.valueOf(dormitoryId));
 
             // INSERT
             Integer result = joinMapper.insertStudent(studentDto);

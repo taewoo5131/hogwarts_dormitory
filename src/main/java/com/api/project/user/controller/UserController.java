@@ -41,7 +41,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody Map<String, String> param, HttpServletRequest request) {
+    public ResponseEntity logout(@RequestBody Map<String, String> param, HttpServletRequest request , HttpServletResponse response) {
         try {
             /**
              * cookie에서 token get
@@ -53,18 +53,17 @@ public class UserController {
                     requestToken = cookie.getValue();
                 }
             }
-            String studentId = param.get("studentId");
+            String studentSeqId = param.get("studentSeqId");
             String dormitoryId = (String) request.getSession().getAttribute("dormitoryId");
-//            requestToken = request.getHeader("Authorization");
 
             Map<String, String> paramMap = new HashMap();
-            paramMap.put("studentId", studentId);
+            paramMap.put("studentSeqId", studentSeqId);
             paramMap.put("dormitoryId", dormitoryId);
             paramMap.put("token", requestToken);
-            userService.logout(paramMap);
+            ResponseEntity logout = userService.logout(paramMap, request, response);
+            return logout;
         } catch (NullPointerException e) {
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 }

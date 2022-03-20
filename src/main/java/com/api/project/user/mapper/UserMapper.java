@@ -13,4 +13,6 @@ public interface UserMapper {
     String getSalt(String studentId);
 
     int changeRefreshToken(HashMap<String, String> paramMap);
+
+    int logout(Map<String, String> paramMap);
 }

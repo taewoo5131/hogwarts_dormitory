@@ -23,4 +23,11 @@
         WHERE STUDENT_ID = #{studentId}
     </insert>
 
+    <update id="logout" parameterType="map">
+        UPDATE STUDENT_INFO
+        SET STUDENT_REFRESH_TOKEN = NULL
+        WHERE STUDENT_SEQ_ID = #{studentSeqId}
+        AND DORMITORY_ID = #{dormitoryId}
+    </update>
+
 </mapper>

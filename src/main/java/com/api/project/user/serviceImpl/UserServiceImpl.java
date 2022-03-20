@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper loginMapper;
+    private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
             }
 
             // 학생의 Salt를 가져옴
-            String salt = loginMapper.getSalt(studentId);
+            String salt = userMapper.getSalt(studentId);
 
             // 암호화된 PW + salt 로 로그인 검증
             SHA256 sha256 = new SHA256();
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
             // DB SELECT : 로그인이 잘못되면 NullPointerException 발생
             try {
-                LoginStudentDto loginStudentDto = loginMapper.login(paramMap);
+                LoginStudentDto loginStudentDto = userMapper.login(paramMap);
                 if (loginStudentDto == null) {
                     throw new NullPointerException("select 결과 null");
                 }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 HashMap<String, String> changeMap = new HashMap<>();
                 changeMap.put("studentId", studentId);
                 changeMap.put("refreshToken", refreshToken);
-                int result = loginMapper.changeRefreshToken(changeMap);
+                int result = userMapper.changeRefreshToken(changeMap);
 
                 // accessToken cookie 저장
                 Cookie cookie = new Cookie("token",accessToken);
@@ -99,12 +100,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity logout(Map<String, String> paramMap) {
-        System.out.println(paramMap.toString());
+    public ResponseEntity logout(Map<String, String> paramMap, HttpServletRequest request, HttpServletResponse response) {
+        log.info("logout할 유저 >> {} ",paramMap.toString());
         String token = paramMap.get("token");
-        String studentId = paramMap.get("studentId");
+        String studentSeqId = paramMap.get("studentSeqId");
         String dormitoryId = paramMap.get("dormitoryId");
+        /**
+         * session에 기숙사 ID 삭제
+         */
+        request.getSession().removeAttribute("dormitoryId");
+        /**
+         * AccessToken token 쿠키에서 삭제
+         */
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
 
-        return null;
+        /**
+         * RefreshToken DB 삭제 param = studentId , dormitoryId
+         */
+        Map<String, String> map = new HashMap<>();
+        map.put("studentSeqId", studentSeqId);
+        map.put("dormitoryId", dormitoryId);
+        int result = userMapper.logout(map);
+        if (result > 0) {
+            return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+        }else{
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
     }
 }

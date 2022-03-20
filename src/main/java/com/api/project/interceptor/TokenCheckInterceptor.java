@@ -4,6 +4,7 @@ import com.api.project.result.ResultEnum;
 import com.api.project.token.JwtTokenProvider;
 import com.api.project.token.exception.TokenException;
 import com.api.project.token.mapper.JwtTokenMapper;
+import com.api.project.user.service.UserService;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +18,22 @@ import springfox.documentation.spring.web.json.Json;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * Access Token 및 Refresh Token 검증
- * /dormitory ,/join , /user/login  을 제외한 모든 요청에 interceptor
+ * /dormitory ,/join , /user/login , /user/logout  을 제외한 모든 요청에 interceptor
  */
 @Slf4j
 public class TokenCheckInterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtTokenMapper jwtTokenMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -105,6 +111,11 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                     /**
                      * 로그아웃
                      */
+                    Map<String, String> paramMap = new HashMap();
+                    paramMap.put("studentSeqId", requestPk);
+                    paramMap.put("dormitoryId", (String)request.getSession().getAttribute("dormitoryId"));
+                    paramMap.put("token", requestToken);
+                    userService.logout(paramMap, request, response);
                     throw new TokenException("BAD_REFRESH_TOKEN");
                 }
                 return false;
