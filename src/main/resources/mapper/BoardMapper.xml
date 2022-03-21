@@ -6,9 +6,10 @@
         FROM BOARD
     </select>
 
-    <select id="getBoard" parameterType="map" resultType="com.api.project.board.dto.Board">
+    <select id="getBoardList" parameterType="map" resultType="com.api.project.board.dto.Board">
         SELECT si.STUDENT_SEQ_ID,
                si.STUDENT_NAME,
+               si.STUDENT_ID,
                si.DORMITORY_ID,
                b.BOARD_SEQ_ID,
                b.BOARD_TITLE,
@@ -25,4 +26,30 @@
         ORDER BY b.BOARD_SEQ_ID
         LIMIT #{pageNo,jdbcType=NUMERIC},#{pageSize,jdbcType=NUMERIC}
     </select>
+
+    <select id="getBoard" parameterType="String" resultType="com.api.project.board.dto.Board">
+        SELECT si.STUDENT_SEQ_ID,
+               si.STUDENT_NAME,
+               si.STUDENT_ID,
+               si.DORMITORY_ID,
+               b.BOARD_SEQ_ID,
+               b.BOARD_TITLE,
+               b.BOARD_BODY,
+               f.FILE_SEQ_ID,
+               f.FILE_PATH,
+               f.FILE_UPLOAD_DT,
+               f.FILE_TITLE
+        FROM STUDENT_INFO si
+        INNER JOIN BOARD b
+        ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID
+        LEFT OUTER JOIN FILE f
+        ON b.BOARD_SEQ_ID = f.BOARD_SEQ_ID
+        WHERE b.BOARD_SEQ_ID = #{boardNo}
+        ORDER BY b.BOARD_SEQ_ID
+    </select>
+
+    <insert id="insertBoard" parameterType="map">
+        INSERT INTO BOARD(BOARD_TITLE, BOARD_BODY, STUDENT_SEQ_ID)
+        VALUES(#{boardTitle},#{boardBody},#{studentSeqId})
+    </insert>
 </mapper>

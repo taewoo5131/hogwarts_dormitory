@@ -2,12 +2,9 @@ package com.api.project.board.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class BoardList {
+public class BoardSelect {
     private String resultCode;
     private String resultMsg;
-    private int boardCnt;
-    private List<Board> boardList;
+    private Board board;
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -26,8 +27,10 @@ public class BoardController {
     public ResponseEntity getList(@RequestParam(required = false) String pageNo, HttpServletRequest request) {
         try{
             ResponseEntity list = boardService.getList(pageNo);
+            log.info("getList success");
             return list;
         }catch(Exception e){
+            log.error(e.toString());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
     }
@@ -36,16 +39,25 @@ public class BoardController {
      * 게시글 단건 조회
      */
     @GetMapping("/{boardNo}")
-    public void getBoard(@PathVariable("boardNo") String boardNo) {
-        System.out.println("getBoard >> " + boardNo);
+    public ResponseEntity getBoard(@PathVariable(value = "boardNo",required = false) String boardNo) {
+        try{
+            ResponseEntity board = boardService.getBoard(boardNo);
+            log.info("getBoard success");
+            return board;
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error(e.toString());
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
      * 게시글 등록
      */
     @PostMapping
-    public void postBoard() {
-        System.out.println("postBoard  ");
+    public ResponseEntity postBoard(@RequestBody Map<String, String> paramMap) {
+        ResponseEntity response = boardService.insertBoard(paramMap);
+        return response;
     }
 
     /**

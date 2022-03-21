@@ -6,6 +6,7 @@ import lombok.Data;
 public class Board {
     private String studentSeqId;
     private String studentName;
+    private String studentId;
     private String dormitoryId;
     private String boardSeqId;
     private String boardTitle;

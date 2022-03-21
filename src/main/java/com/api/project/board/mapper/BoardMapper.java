@@ -10,6 +10,9 @@ import java.util.Map;
 public interface BoardMapper {
     int getAllCount();
 
-    List<Board> getBoard(Map<String, Integer> paramMap);
-//    ArrayList getBoard();
+    List<Board> getBoardList(Map<String, Integer> paramMap);
+
+    Board getBoard(String boardNo);
+
+    int insertBoard(Map<String, String> paramMap);
 }
