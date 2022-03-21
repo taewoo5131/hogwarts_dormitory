@@ -1,8 +1,10 @@
 package com.api.project.board.controller;
 
 import com.api.project.board.service.BoardService;
+import com.api.project.result.ResultEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +23,13 @@ public class BoardController {
      * 게시글 리스트 조회
      */
     @GetMapping
-    public void getList(@RequestParam String pageNo,HttpServletRequest request) {
-        System.out.println("getList  "+pageNo);
-        boardService.getList(pageNo);
-
+    public ResponseEntity getList(@RequestParam(required = false) String pageNo, HttpServletRequest request) {
+        try{
+            ResponseEntity list = boardService.getList(pageNo);
+            return list;
+        }catch(Exception e){
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**

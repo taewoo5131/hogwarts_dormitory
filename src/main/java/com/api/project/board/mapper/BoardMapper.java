@@ -1,9 +1,8 @@
 package com.api.project.board.mapper;
 
+import com.api.project.board.dto.Board;
 import org.apache.ibatis.annotations.Mapper;
-import org.mapstruct.ReportingPolicy;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +10,6 @@ import java.util.Map;
 public interface BoardMapper {
     int getAllCount();
 
-//    ArrayList getBoard(Map<String, Integer> paramMap);
-    ArrayList getBoard();
+    List<Board> getBoard(Map<String, Integer> paramMap);
+//    ArrayList getBoard();
 }
