@@ -21,6 +21,7 @@ public enum ResultEnum {
     LOGIN_ERROR("0008", "로그인 실패"),
     SERVER_ERROR("0010", "서버를 이용할 수 없습니다."),
     DB_ERROR("0011","DB를 이용할 수 없습니다."),
+    NO_PERMISSION("0012","권한이 없습니다."),
 
     NO_TOKEN("0030", "토큰값이 없습니다."),
     BAD_ACCESS_TOKEN("0031", "Access 토큰값이 유효하지 않아 새로운 토큰 발급"),

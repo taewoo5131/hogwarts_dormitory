@@ -10,4 +10,8 @@ public interface BoardService {
     ResponseEntity getBoard(String boardNo);
 
     ResponseEntity insertBoard(Map<String, String> paramMap);
+
+    ResponseEntity updateBoard(Map<String, String> paramMap);
+
+    ResponseEntity deleteBoard(Map<String, Integer> paramMap);
 }

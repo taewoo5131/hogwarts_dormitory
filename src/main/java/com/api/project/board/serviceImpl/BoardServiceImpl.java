@@ -6,11 +6,13 @@ import com.api.project.board.dto.BoardSelect;
 import com.api.project.board.mapper.BoardMapper;
 import com.api.project.board.service.BoardService;
 import com.api.project.result.ResultEnum;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -19,7 +21,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-//@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
@@ -109,6 +111,66 @@ public class BoardServiceImpl implements BoardService {
         }
         if (isValidPass) {
             int result = boardMapper.insertBoard(paramMap);
+            if (result > 0) {
+                log.info("insertBoard success");
+                return new ResponseEntity(ResultEnum.OK, HttpStatus.CREATED);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * BOARD 테이블에 UPDATE
+     * @param paramMap
+     * @return
+     */
+    @Override
+    public ResponseEntity updateBoard(Map<String, String> paramMap) {
+        boolean isValidPass = false;
+        if (
+                paramMap.get("boardSeqId") != null
+                && !paramMap.get("boardSeqId").trim().equals("")
+                && paramMap.get("studentSeqId") != null
+                && !paramMap.get("studentSeqId").trim().equals("")
+                && paramMap.get("boardTitle") != null
+                && !paramMap.get("boardTitle").trim().equals("")
+                && paramMap.get("boardBody") != null
+                && !paramMap.get("boardBody").trim().equals("")
+        ) {
+            isValidPass = true;
+        }else{
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
+        if (isValidPass) {
+            int result = boardMapper.updateBoard(paramMap);
+            if (result > 0) {
+                log.info("updateBoard success");
+                return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * BOARD 테이블에 DELETE
+     * @param paramMap
+     * @return
+     */
+    @Override
+    public ResponseEntity deleteBoard(Map<String, Integer> paramMap) {
+        boolean isValidPass = false;
+        if (
+                paramMap.get("boardSeqId") != null
+                && !String.valueOf(paramMap.get("boardSeqId")).trim().equals("")
+                && paramMap.get("studentSeqId") != null
+                && !String.valueOf(paramMap.get("studentSeqId")).trim().equals("")
+        ) {
+            isValidPass = true;
+        }else{
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
+        }
+        if (isValidPass) {
+            int result = boardMapper.deleteBoard(paramMap);
             if (result > 0) {
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
             }

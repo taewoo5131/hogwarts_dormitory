@@ -15,4 +15,8 @@ public interface BoardMapper {
     Board getBoard(String boardNo);
 
     int insertBoard(Map<String, String> paramMap);
+
+    int updateBoard(Map<String, String> paramMap);
+
+    int deleteBoard(Map<String, Integer> paramMap);
 }

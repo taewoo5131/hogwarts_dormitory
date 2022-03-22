@@ -2,6 +2,7 @@ package com.api.project.board.controller;
 
 import com.api.project.board.service.BoardService;
 import com.api.project.result.ResultEnum;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -64,15 +66,22 @@ public class BoardController {
      * 게시글 수정
      */
     @PatchMapping("/{boardNo}")
-    public void patchBoard(@PathVariable("boardNo") String boardNo) {
-        System.out.println("patchBoard >> " + boardNo);
+    public ResponseEntity patchBoard(@PathVariable("boardNo") String boardNo, @RequestBody Map<String, String> map) {
+        Map<String, String> paramMap = new HashMap<>(map);
+        paramMap.put("boardSeqId", boardNo);
+        ResponseEntity response = boardService.updateBoard(paramMap);
+        return response;
     }
 
     /**
      * 게시글 삭제
      */
     @DeleteMapping("/{boardNo}")
-    public void deleteBoard(@PathVariable("boardNo") String boardNo) {
-        System.out.println("deleteBoard >> " + boardNo);
+    public ResponseEntity deleteBoard(@PathVariable("boardNo") String boardNo, @RequestBody Map<String, String> studentSeqId) {
+        Map<String, Integer> paramMap = new HashMap<>();
+        paramMap.put("boardSeqId", Integer.parseInt(boardNo));
+        paramMap.put("studentSeqId", Integer.parseInt(studentSeqId.get("studentSeqId")));
+        ResponseEntity response = boardService.deleteBoard(paramMap);
+        return response;
     }
 }

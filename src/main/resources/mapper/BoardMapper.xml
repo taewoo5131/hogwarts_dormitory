@@ -52,4 +52,18 @@
         INSERT INTO BOARD(BOARD_TITLE, BOARD_BODY, STUDENT_SEQ_ID)
         VALUES(#{boardTitle},#{boardBody},#{studentSeqId})
     </insert>
+
+    <update id="updateBoard" parameterType="map">
+        UPDATE BOARD
+        SET BOARD_TITLE = #{boardTitle},
+            BOARD_BODY = #{boardBody}
+        WHERE STUDENT_SEQ_ID = #{studentSeqId}
+        AND BOARD_SEQ_ID = #{boardSeqId}
+    </update>
+
+    <delete id="deleteBoard" parameterType="map">
+        DELETE FROM BOARD
+        WHERE BOARD_SEQ_ID = #{boardSeqId}
+        AND STUDENT_SEQ_ID = #{studentSeqId}
+    </delete>
 </mapper>
