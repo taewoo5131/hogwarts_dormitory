@@ -22,10 +22,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new DormitoryCheckinterceptor()).order(1).addPathPatterns("/**").excludePathPatterns("/dormitory","/swagger-ui");
+        registry.addInterceptor(new DormitoryCheckinterceptor()).order(1).addPathPatterns("/**").excludePathPatterns("/dormitory","/swagger-ui.html","/swagger-resources/**","/v2/api-docs","/webjars/**");
 
         // Bean에 등록된 TokenCheckInterceptor를 등록
-        registry.addInterceptor(tokenCheckInterceptor()).order(2).addPathPatterns("/**").excludePathPatterns("/dormitory", "/join" ,"/user/login", "/user/logout", "/swagger-ui");
+        registry.addInterceptor(tokenCheckInterceptor()).order(2).addPathPatterns("/**").excludePathPatterns("/dormitory", "/join" ,"/user/login", "/user/logout", "/swagger-ui.html","/swagger-resources/**","/v2/api-docs","/webjars/**");
     }
 
 }
