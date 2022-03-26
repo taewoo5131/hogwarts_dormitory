@@ -1,0 +1,8 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.project.file.mapper.FileMapper">
+    <insert id="fileUpload" parameterType="com.api.project.file.dto.FileUploadDto">
+        INSERT INTO FIlE(FILE_UPLOAD_DT, FILE_URL, FILE_NM, FILE_SIZE, BOARD_SEQ_ID)
+        VALUES(#{fileUploadDt},#{fileUrl},#{fileNm},#{fileSize},#{boardSeqId})
+    </insert>
+</mapper>

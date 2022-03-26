@@ -1,4 +1,4 @@
-package com.api.project.token.exception;
+package com.api.project.exception;
 
 public class TokenException extends Exception {
     public TokenException() {

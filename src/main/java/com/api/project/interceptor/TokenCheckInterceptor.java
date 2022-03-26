@@ -2,18 +2,14 @@ package com.api.project.interceptor;
 
 import com.api.project.result.ResultEnum;
 import com.api.project.token.JwtTokenProvider;
-import com.api.project.token.exception.TokenException;
+import com.api.project.exception.TokenException;
 import com.api.project.token.mapper.JwtTokenMapper;
 import com.api.project.user.service.UserService;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.Null;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +65,6 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                  * Access Token이 만료된 경우
                  */
             } catch (ExpiredJwtException/* | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException*/ e) {
-                e.printStackTrace();
                 log.error("유효하지 않은 토큰. {} ", e.getClaims().get("pk"));
                 /**
                  * Refresh Token 검증
