@@ -107,12 +107,13 @@ public class BoardServiceImpl implements BoardService {
         ) {
             isValidPass = true;
         }else{
+            log.error("[BoardServiceImpl] [insertBoard] > {} ", "필수값 누락");
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         if (isValidPass) {
             int result = boardMapper.insertBoard(paramMap);
             if (result > 0) {
-                log.info("insertBoard success");
+                log.info("[BoardServiceImpl] [insertBoard] > {} ", paramMap.toString());
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.CREATED);
             }
         }
@@ -139,12 +140,13 @@ public class BoardServiceImpl implements BoardService {
         ) {
             isValidPass = true;
         }else{
+            log.error("[BoardServiceImpl] [updateBoard] > {} ", "필수값 누락");
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         if (isValidPass) {
             int result = boardMapper.updateBoard(paramMap);
             if (result > 0) {
-                log.info("updateBoard success");
+                log.info("[BoardServiceImpl] [updateBoard] > {} ", paramMap.toString());
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
             }
         }
@@ -167,6 +169,7 @@ public class BoardServiceImpl implements BoardService {
         ) {
             isValidPass = true;
         }else{
+            log.error("[BoardServiceImpl] [deleteBoard] > {} ", "필수값 누락");
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         if (isValidPass) {

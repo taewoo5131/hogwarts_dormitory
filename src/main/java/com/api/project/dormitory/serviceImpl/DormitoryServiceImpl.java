@@ -52,7 +52,7 @@ public class DormitoryServiceImpl implements DormitoryService {
             }
             questionList.add(dormitoryQuestionListResponseDto);
         }
-        log.info("result {} ", questionList);
+        log.info("[DormitoryServiceImpl] [getList] > {} ", questionList);
         return new ResponseEntity(questionList,HttpStatus.OK);
     }
 
@@ -65,13 +65,13 @@ public class DormitoryServiceImpl implements DormitoryService {
         if (list.size() == dormitoryMapper.questionList().size()) {
             String dormitoryName = getDormitoryName(list);
             DormitoryInfoDto dormitoryInfo = dormitoryMapper.getDormitoryInfo(dormitoryName);
-            log.info("dormitory info => {} " , dormitoryInfo);
+            log.info("[DormitoryServiceImpl] [postList] > {} ", list.toString());
             HttpSession session = req.getSession();
             session.setAttribute("dormitoryId", dormitoryInfo.getDormitoryId());
             return new ResponseEntity(dormitoryInfo, HttpStatus.OK);
 
         }else{
-            log.error("Insufficient answers submitted => {} " , list.size());
+            log.error("[DormitoryServiceImpl] [postList] > {} ", "문제를 다 제출하지 않았음."+list.size());
         }
         return null;
     }

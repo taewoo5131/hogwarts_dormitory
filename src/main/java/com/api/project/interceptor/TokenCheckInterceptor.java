@@ -50,7 +50,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                 }
             }
 
-            log.info("TokenCheckInterceptor 호출 token 정보 >> {}", requestToken);
+            log.info("[TokenCheckInterceptor] [preHandle] > {}", "token : " + requestToken);
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
             /**
              * Access Token 만료시간 검증
@@ -58,14 +58,14 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             try {
                 boolean b = jwtTokenProvider.validAccessToken(requestToken);
                 if (b) {
-                    log.info("AccessToken 유효");
+                    log.info("[TokenCheckInterceptor] [preHandle] > {}", "AccessToken 유효");
                     return true;
                 }
                 /**
                  * Access Token이 만료된 경우
                  */
             } catch (ExpiredJwtException/* | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException*/ e) {
-                log.error("유효하지 않은 토큰. {} ", e.getClaims().get("pk"));
+                log.error("[TokenCheckInterceptor] [preHandle] > {}", "AccessToken이 유효하지 않은 토큰 , request PK : "+ e.getClaims().get("pk"));
                 /**
                  * Refresh Token 검증
                  */
@@ -77,7 +77,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                         /**
                          * Access Token 재발급
                          */
-                        log.info("AccessToken 재발급");
+                        log.info("[TokenCheckInterceptor] [preHandle] > {}", "AccessToken 재발급");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("resultCode", ResultEnum.BAD_ACCESS_TOKEN.getResultCode());
                         jsonObject.put("resultMsg", ResultEnum.BAD_ACCESS_TOKEN.getResultMsg());
@@ -101,7 +101,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                     /**
                      * return 토큰이 만료되었습니다.
                      */
-                    log.error("RefreshToken도 만료");
+                    log.error("[TokenCheckInterceptor] [preHandle] > {}", "RefreshToken 만료");
 
                     /**
                      * 로그아웃
@@ -120,7 +120,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
          * HTTP header에 Authorization 자체가 없을 경우
          */
         } catch (NullPointerException | IllegalArgumentException e) {
-            log.info("HTTP token 자체가 null");
+            log.error("[TokenCheckInterceptor] [preHandle] > {}", "HTTP token 자체가 null");
             throw new TokenException("NO_TOKEN");
         }
 

@@ -78,22 +78,23 @@ public class UserServiceImpl implements UserService {
                     loginStudentDto.setResultCode(ResultEnum.OK.getResultCode());
                     loginStudentDto.setResultMsg(ResultEnum.OK.getResultMsg());
                     loginStudentDto.setToken(accessToken);
+                    log.error("[UserServiceImpl] [login] > {} ", "login 성공 " + "ID : " + studentId);
                     return new ResponseEntity(loginStudentDto, HttpStatus.OK);
                 }
             // select 정보가 없을때
             } catch (NullPointerException e) {
-                log.error("login 실패 : client 에러 -> {} ", e.getMessage());
+                log.error("[UserServiceImpl] [login] > {} ", "login 실패 " + e.getMessage());
                 return new ResponseEntity(ResultEnum.LOGIN_ERROR, HttpStatus.BAD_REQUEST);
             } catch (Exception e) {
-                log.error("login 실패 : API 서버 에러 -> {}" , e);
+                log.error("[UserServiceImpl] [login] > {} ", "login 실패 " + e.getMessage());
                 return new ResponseEntity(ResultEnum.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         // 파라미터 null 일때
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            log.error("[UserServiceImpl] [login] > {} ", "login 실패 " + e.getMessage());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[UserServiceImpl] [login] > {} ", "login 실패 " + e.getMessage());
             return new ResponseEntity(ResultEnum.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return null;
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
         map.put("dormitoryId", dormitoryId);
         int result = userMapper.logout(map);
         if (result > 0) {
-            log.info("logout할 유저 >> {} ",paramMap.toString());
+            log.info("[UserServiceImpl] [logout] > {} ", "로그아웃 성공 : " + paramMap.toString());
             return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
         }else{
 

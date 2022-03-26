@@ -29,16 +29,15 @@ public class DormitoryController {
     private final DormitoryService dormitoryService;
 
     @GetMapping
-    public ResponseEntity dormitorySelect() {
-        log.info("dormitory select");
+    public ResponseEntity getDormitorySelect() {
         ResponseEntity response = dormitoryService.getList();
         return response;
     }
 
     @PostMapping
-    public ResponseEntity dormitorySelectFinish(HttpServletRequest req , @RequestBody List<DormitoryQuestionResultRequestDto> list){
-        log.info("dormitory selectFinish");
+    public ResponseEntity postDormitorySelect(HttpServletRequest req , @RequestBody List<DormitoryQuestionResultRequestDto> list){
         ResponseEntity response = dormitoryService.postList(req, list);
+        log.info("[DormitoryController] [postDormitorySelect] > {} ", response.toString());
         return response;
     }
 }

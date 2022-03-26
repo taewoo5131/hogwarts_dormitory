@@ -15,9 +15,9 @@
                b.BOARD_TITLE,
                b.BOARD_BODY,
                f.FILE_SEQ_ID,
-               f.FILE_PATH,
                f.FILE_UPLOAD_DT,
-               f.FILE_TITLE
+               f.FILE_NM,
+               f.FILE_URL
         FROM STUDENT_INFO si
         INNER JOIN BOARD b
         ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID
@@ -36,9 +36,9 @@
                b.BOARD_TITLE,
                b.BOARD_BODY,
                f.FILE_SEQ_ID,
-               f.FILE_PATH,
                f.FILE_UPLOAD_DT,
-               f.FILE_TITLE
+               f.FILE_NM,
+               f.FILE_URL
         FROM STUDENT_INFO si
         INNER JOIN BOARD b
         ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID

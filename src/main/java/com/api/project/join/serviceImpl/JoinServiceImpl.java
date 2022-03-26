@@ -43,19 +43,19 @@ public class JoinServiceImpl implements JoinService {
             Integer isAlreadyId = joinMapper.checkById(studentId);
             // 아이디 중복 체크
             if (isAlreadyId > 0) {
-                log.info("JoinServiceImpl.insertStudent 아이디 중복 체크");
+                log.error("[JoinServiceImpl] [insertStudent] > {} ", "아이디 중복");
                 return new ResponseEntity(ResultEnum.ALREADY_USER, HttpStatus.BAD_REQUEST);
             // 비밀번호 동일 여부
             } else if (!studentPw.equals(studentPwCh)) {
-                log.info("JoinServiceImpl.insertStudent pw 동일 여부");
+                log.error("[JoinServiceImpl] [insertStudent] > {} ", "pw 동일하지 않음");
                 return new ResponseEntity(ResultEnum.PASSWORD_ERROR, HttpStatus.BAD_REQUEST);
             // 비밀번호 length 체크
             } else if (studentPw.length() < 4) {
-                log.info("JoinServiceImpl.insertStudent pw length check");
+                log.error("[JoinServiceImpl] [insertStudent] > {} ", "pw length 오류");
                 return new ResponseEntity(ResultEnum.PASSWORD_ERROR, HttpStatus.BAD_REQUEST);
             // 기숙사 1 ~ 4 여부
             } else if (dormitoryId < 1 || dormitoryId > 4) {
-                log.info("JoinServiceImpl.insertStudent 기숙사 1 ~ 4 여부");
+                log.error("[JoinServiceImpl] [insertStudent] > {} ", "올바르지 않은 기숙사");
                 return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
             }
             // PW 암호화
@@ -73,14 +73,13 @@ public class JoinServiceImpl implements JoinService {
             // INSERT
             Integer result = joinMapper.insertStudent(studentDto);
             if (result > 0) {
-                log.info("정상 회원가입 성공 {} ", TransactionAspectSupport.currentTransactionStatus());
-                // this.transactionManager.commit(this.transactionManager.getTransaction(new DefaultTransactionDefinition()));
+                log.info("[JoinServiceImpl] [insertStudent] > {} ", "회원가입 성공 : "+ ", ID : " + studentDto.getStudentId() + ", dormitoryId : " + studentDto.getDormitoryId() + ", studentName : " + studentDto.getStudentName());
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             // rollback
 //            this.transactionManager.rollback(this.transactionManager.getTransaction(new DefaultTransactionDefinition()));
+            log.error("[JoinServiceImpl] [insertStudent] > {} ", "회원가입 실패 : " + "transactionState : " + TransactionAspectSupport.currentTransactionStatus() );
             return new ResponseEntity(ResultEnum.DB_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

@@ -2,6 +2,7 @@ package com.api.project.file.serviceImpl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.internal.Mimetypes;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
@@ -57,17 +58,24 @@ public class FileServiceImpl implements FileService {
         /**
          * file Upload & DB insert
          */
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(Mimetypes.getInstance().getMimetype(fileName));
         try {
             /**
              * file Upload
              */
+            // file의 inputStream을 byte Array로 변환
             InputStream inputStream = file.getInputStream();
             byte[] bytes = IOUtils.toByteArray(inputStream);
-            objectMetadata.setContentLength(bytes.length);
+
+            // byte로 변환된 inputStream을 byteArrayInputStream으로 변환
             ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayIs, objectMetadata));
+
+            // s3에 file을 byte로 올리기때문에 해당 파일에 대한 정보가 없다. 그래서 ObjectMetadata에 파일의 정보를 추가해서 넘겨준다.
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(Mimetypes.getInstance().getMimetype(fileName));
+            objectMetadata.setContentLength(bytes.length);
+
+            // s3에 업로드
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayIs, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
 
             /**
@@ -81,6 +89,7 @@ public class FileServiceImpl implements FileService {
             fileUploadDto.setFileSize(String.valueOf(fileSize));
             int result = fileMapper.fileUpload(fileUploadDto);
             if (result > 0) {
+                log.error("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
                 return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
             }
         } catch (IOException e) {

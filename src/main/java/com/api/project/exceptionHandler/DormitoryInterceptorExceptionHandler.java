@@ -23,7 +23,7 @@ public class DormitoryInterceptorExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity illegalArgumentExceptionHandler(IllegalArgumentException e) {
-        log.error("this is ExceptionController.illegalArgumentExceptionHandler {} " , e.getMessage());
+        log.error("[DormitoryInterceptorExceptionHandler] [illegalArgumentExceptionHandler]{} " , e.getMessage());
         if (e.getMessage().equals("MUGGLE")) {
             return new ResponseEntity(ResultEnum.MUGGLE,HttpStatus.BAD_REQUEST);
         }

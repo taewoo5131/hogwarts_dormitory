@@ -12,7 +12,7 @@ public class Board {
     private String boardTitle;
     private String boardBody;
     private String fileSeqId;
-    private String filePath;
     private String fileUploadDt;
-    private String fileTitle;
+    private String fileNm;
+    private String fileUrl;
 }

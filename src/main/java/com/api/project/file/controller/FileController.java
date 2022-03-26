@@ -27,10 +27,10 @@ public class FileController {
             ResponseEntity response = fileService.uploadFile(file, boardSeqId);
             return response;
         } catch (FileUploadFailException e) {
-            log.error("[FileController uploadFile] [FileUploadFailException] > {}", e.getMessage());
+            log.error("[FileController] [uploadFile] > {}", e.getMessage());
             return new ResponseEntity(ResultEnum.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IllegalArgumentException e) {
-            log.error("[FileController uploadFile] [FileUploadFailException] > {}", e.getMessage());
+            log.error("[FileController] [uploadFile] > {}", e.getMessage());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
 

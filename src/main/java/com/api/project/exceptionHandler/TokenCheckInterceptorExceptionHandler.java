@@ -22,7 +22,7 @@ public class TokenCheckInterceptorExceptionHandler {
      */
     @ExceptionHandler(TokenException.class)
     public ResponseEntity tokenExceptionHandler(TokenException e) {
-        log.error("this is TokenCheckInterceptorExceptionHandler.tokenExceptionHandler {} ", e.getMessage());
+        log.error("[TokenCheckInterceptorExceptionHandler] [tokenExceptionHandler] > {} ", e.getMessage());
         if (e.getMessage().equals("NO_TOKEN")) {
             return new ResponseEntity(ResultEnum.NO_TOKEN, HttpStatus.UNAUTHORIZED);
         }

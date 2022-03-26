@@ -29,10 +29,10 @@ public class BoardController {
     public ResponseEntity getList(@RequestParam(required = false) String pageNo, HttpServletRequest request) {
         try{
             ResponseEntity list = boardService.getList(pageNo);
-            log.info("getList success");
+            log.info("[BoardController] [getList] > {} ", "게시글 조회 " + list.toString());
             return list;
         }catch(Exception e){
-            log.error(e.toString());
+            log.error("[BoardController] [getList] > {} ", "게시글 조회 " + e.toString());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
     }
@@ -44,11 +44,10 @@ public class BoardController {
     public ResponseEntity getBoard(@PathVariable(value = "boardNo",required = false) String boardNo) {
         try{
             ResponseEntity board = boardService.getBoard(boardNo);
-            log.info("getBoard success");
+            log.info("[BoardController] [getBoard] > {} ", "게시글 단건 조회 " + board.toString());
             return board;
         }catch(Exception e){
-            e.printStackTrace();
-            log.error(e.toString());
+            log.error("[BoardController] [getBoard] > {} ", "게시글 단건 조회 " + e.toString());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
     }

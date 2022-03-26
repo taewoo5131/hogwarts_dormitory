@@ -37,7 +37,6 @@ public class JoinController {
             }
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
-        log.info("joinController 호출");
         ResponseEntity response = joinService.insertStudent(studentDto , request);
         return response;
     }
