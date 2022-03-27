@@ -1,6 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.project.board.mapper.BoardMapper">
+
     <select id="getAllCount" resultType="int">
         SELECT COUNT(*)
         FROM BOARD
@@ -13,16 +14,10 @@
                si.DORMITORY_ID,
                b.BOARD_SEQ_ID,
                b.BOARD_TITLE,
-               b.BOARD_BODY,
-               f.FILE_SEQ_ID,
-               f.FILE_UPLOAD_DT,
-               f.FILE_NM,
-               f.FILE_URL
+               b.BOARD_BODY
         FROM STUDENT_INFO si
         INNER JOIN BOARD b
         ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID
-        LEFT OUTER JOIN FILE f
-        ON b.BOARD_SEQ_ID = f.BOARD_SEQ_ID
         ORDER BY b.BOARD_SEQ_ID
         LIMIT #{pageNo,jdbcType=NUMERIC},#{pageSize,jdbcType=NUMERIC}
     </select>
@@ -34,19 +29,28 @@
                si.DORMITORY_ID,
                b.BOARD_SEQ_ID,
                b.BOARD_TITLE,
-               b.BOARD_BODY,
-               f.FILE_SEQ_ID,
-               f.FILE_UPLOAD_DT,
-               f.FILE_NM,
-               f.FILE_URL
+               b.BOARD_BODY
         FROM STUDENT_INFO si
         INNER JOIN BOARD b
         ON si.STUDENT_SEQ_ID = b.STUDENT_SEQ_ID
-        LEFT OUTER JOIN FILE f
-        ON b.BOARD_SEQ_ID = f.BOARD_SEQ_ID
         WHERE b.BOARD_SEQ_ID = #{boardNo}
         ORDER BY b.BOARD_SEQ_ID
     </select>
+
+    <select id="getFileList" parameterType="String" resultMap="selectFileList">
+        SELECT f.FILE_SEQ_ID, f.FILE_UPLOAD_DT, f.FILE_URL, f.FILE_NM, f.FILE_SIZE
+        FROM FILE f
+        WHERE f.BOARD_SEQ_ID = #{boardNo}
+        ORDER BY f.FILE_SEQ_ID
+    </select>
+    <resultMap type="map" id="selectFileList">
+        <result column="FILE_SEQ_ID" property="fileSeqId" jdbcType="VARCHAR"/>
+        <result column="FILE_UPLOAD_DT" property="fileUploadDt" jdbcType="VARCHAR"/>
+        <result column="FILE_URL" property="fileUrl" jdbcType="VARCHAR"/>
+        <result column="FILE_NM" property="fileNm" jdbcType="VARCHAR"/>
+        <result column="FILE_SIZE" property="fileSize" jdbcType="VARCHAR"/>
+    </resultMap>
+
 
     <insert id="insertBoard" parameterType="map">
         INSERT INTO BOARD(BOARD_TITLE, BOARD_BODY, STUDENT_SEQ_ID)

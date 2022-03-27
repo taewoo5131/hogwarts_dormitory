@@ -44,10 +44,10 @@ public class BoardController {
     public ResponseEntity getBoard(@PathVariable(value = "boardNo",required = false) String boardNo) {
         try{
             ResponseEntity board = boardService.getBoard(boardNo);
-            log.info("[BoardController] [getBoard] > {} ", "게시글 단건 조회 " + board.toString());
+            log.info("[BoardController] [getBoard] > {} ", "게시글 단건 조회 " + board);
             return board;
         }catch(Exception e){
-            log.error("[BoardController] [getBoard] > {} ", "게시글 단건 조회 " + e.toString());
+            log.error("[BoardController] [getBoard] > {} ", "게시글 단건 조회 error " + e.toString());
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
     }

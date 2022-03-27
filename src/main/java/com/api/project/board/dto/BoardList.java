@@ -8,6 +8,6 @@ import java.util.List;
 public class BoardList {
     private String resultCode;
     private String resultMsg;
-    private int boardCnt;
+    private String boardCnt;
     private List<Board> boardList;
 }

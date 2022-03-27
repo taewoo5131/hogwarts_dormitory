@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -60,7 +60,7 @@ public class BoardServiceImpl implements BoardService {
             BoardList boardList = new BoardList();
             boardList.setResultCode(ResultEnum.OK.getResultCode());
             boardList.setResultMsg(ResultEnum.OK.getResultMsg());
-            boardList.setBoardCnt(allCount);
+            boardList.setBoardCnt(String.valueOf(allCount));
             if (boards.size() > 0) {
                 boardList.setBoardList(boards);
             }
@@ -79,13 +79,33 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public ResponseEntity getBoard(String boardNo) {
+        /**
+         * 게시글 + 작성자 단건 조회
+         */
         Board board = boardMapper.getBoard(boardNo);
         BoardSelect boardSelect = new BoardSelect();
         boardSelect.setResultCode(ResultEnum.OK.getResultCode());
         boardSelect.setResultMsg(ResultEnum.OK.getResultMsg());
         if (board != null) {
-            boardSelect.setBoard(board);
+            boardSelect.setStudentSeqId(board.getStudentSeqId());
+            boardSelect.setStudentName(board.getStudentName());
+            boardSelect.setStudentId(board.getStudentId());
+            boardSelect.setDormitoryId(board.getDormitoryId());
+            boardSelect.setBoardSeqId(board.getBoardSeqId());
+            boardSelect.setBoardTitle(board.getBoardTitle());
+            boardSelect.setBoardBody(board.getBoardBody());
         }
+        /**
+         * 해당 게시글 파일리스트 조회
+         */
+        List<Map<String, Object>> fileList = boardMapper.getFileList(boardNo);
+        // String으로 convert 후 return해주기 위해
+        for (int i = 0; i < fileList.size(); i++) {
+            fileList.get(i).put("fileSeqId" , String.valueOf(fileList.get(i).get("fileSeqId")));
+            fileList.get(i).put("fileUploadDt" , String.valueOf(fileList.get(i).get("fileUploadDt")));
+        }
+
+        boardSelect.setFileList(fileList);
         return new ResponseEntity(boardSelect,HttpStatus.OK);
     }
 
