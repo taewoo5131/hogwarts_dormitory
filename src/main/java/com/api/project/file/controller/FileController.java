@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -36,8 +38,14 @@ public class FileController {
 
     }
 
-    @GetMapping
-    public void downloadFile() {
-
+    @GetMapping("/{fileName}")
+    public ResponseEntity downloadFile(@PathVariable String fileName) {
+        try {
+            ResponseEntity response = fileService.downloadFile(fileName);
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity(ResultEnum.SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

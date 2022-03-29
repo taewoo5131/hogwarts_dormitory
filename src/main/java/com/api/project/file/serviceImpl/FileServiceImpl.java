@@ -2,12 +2,11 @@ package com.api.project.file.serviceImpl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.internal.Mimetypes;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.api.project.exception.FileUploadFailException;
 import com.api.project.file.dto.FileUploadDto;
+import com.api.project.file.dto.FileUploadResponseDto;
 import com.api.project.file.mapper.FileMapper;
 import com.api.project.file.service.FileService;
 import com.api.project.result.ResultEnum;
@@ -15,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeType;
@@ -26,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @Service
@@ -89,13 +89,27 @@ public class FileServiceImpl implements FileService {
             fileUploadDto.setFileSize(String.valueOf(fileSize));
             int result = fileMapper.fileUpload(fileUploadDto);
             if (result > 0) {
-                log.error("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
-                return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+                log.info("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
+                FileUploadResponseDto responseDto = new FileUploadResponseDto(ResultEnum.OK.getResultCode(),ResultEnum.OK.getResultMsg(),fileUrl);
+                return new ResponseEntity(responseDto, HttpStatus.OK);
             }
         } catch (IOException e) {
             throw new FileUploadFailException("file upload failed");
         }
 
         return null;
+    }
+
+    @Override
+    public ResponseEntity downloadFile(String fileName) throws IOException{
+        S3Object object = amazonS3Client.getObject(new GetObjectRequest(this.bucket, fileName));
+        S3ObjectInputStream objectContent = object.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectContent);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentLength(bytes.length);
+        httpHeaders.setContentDispositionFormData("attachment", new String(fileName.getBytes(StandardCharsets.UTF_8)));
+
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
 }
