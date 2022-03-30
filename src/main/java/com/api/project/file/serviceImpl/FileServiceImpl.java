@@ -21,12 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeType;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
@@ -79,9 +77,6 @@ public class FileServiceImpl implements FileService {
             // s3에 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayIs, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-            System.out.println(fileName);
-            System.out.println(amazonS3Client.getUrl(bucket, fileName).toString());
-            System.out.println(amazonS3Client.getResourceUrl(bucket,fileName));
 
             /**
              * DB insert
@@ -90,16 +85,14 @@ public class FileServiceImpl implements FileService {
             fileUploadDto.setFileUploadDt(LocalDateTime.now());
             fileUploadDto.setBoardSeqId(boardSeqId);
             fileUploadDto.setFileNm(fileName);
-//            fileUploadDto.setFileUrl(fileUrl);
-            fileUploadDto.setFileUrl(URLEncoder.encode(fileUrl,"ISO-8859-1"));
+            fileUploadDto.setFileUrl(fileUrl);
             fileUploadDto.setFileSize(String.valueOf(fileSize));
-            System.out.println(fileUploadDto.getFileUrl());
-//            int result = fileMapper.fileUpload(fileUploadDto);
-//            if (result > 0) {
-//                log.info("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
-//                FileUploadResponseDto responseDto = new FileUploadResponseDto(ResultEnum.OK.getResultCode(),ResultEnum.OK.getResultMsg(),fileUrl);
-//                return new ResponseEntity(responseDto, HttpStatus.OK);
-//            }
+            int result = fileMapper.fileUpload(fileUploadDto);
+            if (result > 0) {
+                log.info("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
+                FileUploadResponseDto responseDto = new FileUploadResponseDto(ResultEnum.OK.getResultCode(),ResultEnum.OK.getResultMsg(),fileUrl);
+                return new ResponseEntity(responseDto, HttpStatus.OK);
+            }
         } catch (IOException e) {
             throw new FileUploadFailException("file upload failed");
         }
@@ -108,28 +101,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ResponseEntity downloadFile(String fileName, HttpServletResponse response) throws IOException{
-        String filename = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
-        // S3에서 파일 스트림을 얻어온다 byte
+    public ResponseEntity downloadFile(String fileName) throws IOException{
         S3Object object = amazonS3Client.getObject(new GetObjectRequest(this.bucket, fileName));
         S3ObjectInputStream objectContent = object.getObjectContent();
         byte[] bytes = IOUtils.toByteArray(objectContent);
-
-        // 클라이언트에게 전송하기위해 전송 정보를 담을 HTTP header를 생성
         HttpHeaders httpHeaders = new HttpHeaders();
-
-        // header에 파일정보와 용량을 세팅한다.
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         httpHeaders.setContentLength(bytes.length);
-        httpHeaders.setContentDispositionFormData("attachment",filename);
-//        httpHeaders.add("Content-Disposition","attachment; filename="+new String(fileName.getBytes("UTF-8"),"ISO-8859-1"));
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("UTF-8"),"ISO-8859-1") + "\"");
-        // 파일명을 세팅한다.
-//        String filename = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
-//        httpHeaders.setContentDispositionFormData("attachment", new String(URLEncoder.encode(fileName, String.valueOf(StandardCharsets.UTF_8))));
-//        httpHeaders.setContentDispositionFormData("attachment",URLEncoder.encode(fileName, "utf-8"));
+        httpHeaders.setContentDispositionFormData("attachment", new String(fileName.getBytes(StandardCharsets.UTF_8)));
 
-        log.info("다운로드 파일 명 {}", filename);
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
 }
