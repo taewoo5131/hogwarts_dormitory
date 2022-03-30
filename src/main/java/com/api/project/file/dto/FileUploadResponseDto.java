@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class FileUploadResponseDto {
     private String resultCode;
     private String resultMsg;
-    private String filePath;
+    private String fileUrl;
 }
