@@ -39,8 +39,6 @@ dependencies {
 	// - myBatis test
 //	testCompileClasspath("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.1.1")
 
-	// - aws
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.2'
 
 
 	compileOnly 'org.projectlombok:lombok'

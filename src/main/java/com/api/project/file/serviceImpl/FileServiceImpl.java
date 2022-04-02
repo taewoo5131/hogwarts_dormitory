@@ -1,9 +1,4 @@
 package com.api.project.file.serviceImpl;
-
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.internal.Mimetypes;
-import com.amazonaws.services.s3.model.*;
-import com.amazonaws.util.IOUtils;
 import com.api.project.exception.FileUploadFailException;
 import com.api.project.file.dto.FileUploadDto;
 import com.api.project.file.dto.FileUploadResponseDto;
@@ -26,7 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -34,82 +31,49 @@ import java.time.LocalDateTime;
 @Transactional(rollbackFor = Exception.class)
 public class FileServiceImpl implements FileService {
 
-    @Value("${cloud.aws.s3.bucket}")
-    String bucket;
-
-    private final AmazonS3Client amazonS3Client;
+    private String filePath = "/Users/leetaewoo/Desktop/Toy-Project/uploadDir/";
     private final FileMapper fileMapper;
 
     @Override
     public ResponseEntity uploadFile(MultipartFile file, String boardSeqId) throws FileUploadFailException{
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("file is empty");
-        }
-
-        String fileName = file.getOriginalFilename();
-        Long fileSize = file.getSize();
-        /**
-         * fileSize 40MB 까지
-         */
-        if (fileSize > 40 * 1024 * 1024) {
-            throw new FileUploadFailException("fileSize over this fileSize is " + fileSize / 1024 / 1024);
-        }
-
-        /**
-         * file Upload & DB insert
-         */
         try {
-            /**
-             * file Upload
-             */
-            // file의 inputStream을 byte Array로 변환
-            InputStream inputStream = file.getInputStream();
-            byte[] bytes = IOUtils.toByteArray(inputStream);
+            // null체크
+            if (file.isEmpty()) {
+                throw new IllegalArgumentException("file is empty");
+            }
+            // DB에 올라갈 realFilename
+            String originalFilename = file.getOriginalFilename();
+            // dir에 저장할 storeFilename
+            String storeFilename = String.valueOf(UUID.randomUUID())+"_"+originalFilename;
 
-            // byte로 변환된 inputStream을 byteArrayInputStream으로 변환
-            ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
-
-            // s3에 file을 byte로 올리기때문에 해당 파일에 대한 정보가 없다. 그래서 ObjectMetadata에 파일의 정보를 추가해서 넘겨준다.
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(Mimetypes.getInstance().getMimetype(fileName));
-            objectMetadata.setContentLength(bytes.length);
-
-            // s3에 업로드
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayIs, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-
-            /**
-             * DB insert
-             */
+            // fileFullPath
+            String fileFullPath = filePath + storeFilename;
+            // dir에 저장 ( storeFilename이 올라간다. )
+            file.transferTo(new File(fileFullPath));
+            // DB에 저장 ( originalFilename이 올라간다. )
             FileUploadDto fileUploadDto = new FileUploadDto();
             fileUploadDto.setFileUploadDt(LocalDateTime.now());
+            fileUploadDto.setFileNm(originalFilename);
+            fileUploadDto.setFileSize(String.valueOf(file.getSize()));
+            fileUploadDto.setFileUrl(fileFullPath);
             fileUploadDto.setBoardSeqId(boardSeqId);
-            fileUploadDto.setFileNm(fileName);
-            fileUploadDto.setFileUrl(fileUrl);
-            fileUploadDto.setFileSize(String.valueOf(fileSize));
-            int result = fileMapper.fileUpload(fileUploadDto);
-            if (result > 0) {
-                log.info("[FileServiceImpl] [uploadFile] > {} ", "파일업로드 성공 : " + fileUploadDto.toString());
-                FileUploadResponseDto responseDto = new FileUploadResponseDto(ResultEnum.OK.getResultCode(),ResultEnum.OK.getResultMsg(),fileUrl);
-                return new ResponseEntity(responseDto, HttpStatus.OK);
+            int i = fileMapper.fileUpload(fileUploadDto);
+            // 정상 업로드 성공
+            if (i > 0) {
+                FileUploadResponseDto fileUploadResponseDto = new FileUploadResponseDto(ResultEnum.OK.getResultCode(), ResultEnum.OK.getResultMsg(),fileFullPath);
+                return new ResponseEntity(fileUploadResponseDto, HttpStatus.OK);
+            }else{
+                throw new FileUploadFailException("uploadFail");
             }
-        } catch (IOException e) {
-            throw new FileUploadFailException("file upload failed");
-        }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public ResponseEntity downloadFile(String fileName) throws IOException{
-        S3Object object = amazonS3Client.getObject(new GetObjectRequest(this.bucket, fileName));
-        S3ObjectInputStream objectContent = object.getObjectContent();
-        byte[] bytes = IOUtils.toByteArray(objectContent);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentLength(bytes.length);
-        httpHeaders.setContentDispositionFormData("attachment", new String(fileName.getBytes(StandardCharsets.UTF_8)));
-
-        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+        return null;
     }
 }
