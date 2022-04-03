@@ -164,10 +164,17 @@ public class BoardServiceImpl implements BoardService {
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         if (isValidPass) {
-            int result = boardMapper.updateBoard(paramMap);
-            if (result > 0) {
-                log.info("[BoardServiceImpl] [updateBoard] > {} ", paramMap.toString());
-                return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+            Board board = boardMapper.getBoard(String.valueOf(paramMap.get("boardSeqId")));
+            // 내가 작성한 글만 삭제가능
+            if (board.getStudentSeqId().equals(String.valueOf(paramMap.get("studentSeqId")))) {
+                int result = boardMapper.updateBoard(paramMap);
+                if (result > 0) {
+                    log.info("[BoardServiceImpl] [updateBoard] > {} ", paramMap.toString());
+                    return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+                }
+            } else {
+                log.info("[BoardServiceImpl] [updateBoard] > {}, ", "권한이 없는 사용자입니다.");
+                return new ResponseEntity(ResultEnum.NO_PERMISSION, HttpStatus.BAD_REQUEST);
             }
         }
         return null;
@@ -193,10 +200,18 @@ public class BoardServiceImpl implements BoardService {
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
         if (isValidPass) {
-            int result = boardMapper.deleteBoard(paramMap);
-            if (result > 0) {
-                return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+            Board board = boardMapper.getBoard(String.valueOf(paramMap.get("boardSeqId")));
+            // 내가 작성한 글만 삭제가능
+            if (board.getStudentSeqId().equals(String.valueOf(paramMap.get("studentSeqId")))) {
+                int result = boardMapper.deleteBoard(paramMap);
+                if (result > 0) {
+                    return new ResponseEntity(ResultEnum.OK, HttpStatus.OK);
+                }
+            } else {
+                log.info("[BoardServiceImpl] [deleteBoard] > {}, ", "권한이 없는 사용자입니다.");
+                return new ResponseEntity(ResultEnum.NO_PERMISSION, HttpStatus.BAD_REQUEST);
             }
+
         }
         return null;
     }

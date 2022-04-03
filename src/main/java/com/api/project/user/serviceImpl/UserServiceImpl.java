@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
                     loginStudentDto.setResultCode(ResultEnum.OK.getResultCode());
                     loginStudentDto.setResultMsg(ResultEnum.OK.getResultMsg());
                     loginStudentDto.setToken(accessToken);
-                    log.error("[UserServiceImpl] [login] > {} ", "login 성공 " + "ID : " + studentId);
+                    log.info("[UserServiceImpl] [login] > {} ", "login 성공 " + "ID : " + studentId);
                     return new ResponseEntity(loginStudentDto, HttpStatus.OK);
                 }
             // select 정보가 없을때
