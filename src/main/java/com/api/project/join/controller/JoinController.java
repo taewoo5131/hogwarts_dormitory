@@ -33,7 +33,7 @@ public class JoinController {
         if (result.hasErrors()) {
             List<ObjectError> list =  result.getAllErrors();
             for(ObjectError e : list) {
-                System.out.println(e.getDefaultMessage());
+                log.error("[JoinController] [postJoin] > {}, ", e.getDefaultMessage());
             }
             return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         }
