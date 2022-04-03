@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 public class FileUploadResponseDto {
     private String resultCode;
     private String resultMsg;
+    private String fileSeqId;
+    private String fileName;
     private String filePath;
+    private String fileUploadDt;
 }

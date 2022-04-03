@@ -5,4 +5,16 @@
         INSERT INTO FIlE(FILE_UPLOAD_DT, FILE_URL, FILE_NM, FILE_SIZE, BOARD_SEQ_ID)
         VALUES(#{fileUploadDt},#{fileUrl},#{fileNm},#{fileSize},#{boardSeqId})
     </insert>
+
+    <select id="getFileSeqId" parameterType="String" resultType="String">
+        SELECT FILE_SEQ_ID
+        FROM FILE
+        WHERE FILE_URL = #{fileUrl}
+    </select>
+
+    <select id="getFileInfo" parameterType="String" resultType="com.api.project.file.dto.FileEntity">
+        SELECT *
+        FROM FILE
+        WHERE FILE_SEQ_ID = #{fileSeqId}
+    </select>
 </mapper>

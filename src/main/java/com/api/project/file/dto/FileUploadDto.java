@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class FileUploadDto {
 
     private String boardSeqId;
+    private String fileSeqId;
     private String fileUrl;
     private String fileNm;
     private String fileSize;

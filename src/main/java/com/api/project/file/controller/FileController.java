@@ -42,14 +42,17 @@ public class FileController{
 
     }
 
-    @GetMapping("/{fileName}")
-    public ResponseEntity downloadFile(@PathVariable String fileName) {
+    @GetMapping("/{fileSeqId}")
+    public ResponseEntity downloadFile(@PathVariable String fileSeqId) {
         try {
-            ResponseEntity response = fileService.downloadFile(fileName);
+            ResponseEntity response = fileService.downloadFile(fileSeqId);
             return response;
+        } catch (IllegalArgumentException e) {
+            log.error("[FileController] [downloadFile] > {}", e.getMessage());
+            return new ResponseEntity(ResultEnum.ARGUMENTS_NOT_ENOUGH, HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity(ResultEnum.SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("[FileController] [downloadFile] > {}", "IOException 발생");
+            return new ResponseEntity(ResultEnum.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

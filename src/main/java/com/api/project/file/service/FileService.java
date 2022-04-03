@@ -9,5 +9,5 @@ import java.io.IOException;
 public interface FileService {
     ResponseEntity uploadFile(MultipartFile file, String boardSeqId) throws FileUploadFailException;
 
-    ResponseEntity downloadFile(String fileName) throws IOException;
+    ResponseEntity downloadFile(String fileSeqId) throws IOException;
 }
